@@ -1,0 +1,7 @@
+.brand {
+  font-size: 40px;
+  font-weight: 600;
+}
+.chakra-switch__track[data-checked] {
+  background: var(--chakra-colors-brandScheme-500);
+}
