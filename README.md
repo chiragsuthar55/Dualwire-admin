@@ -10,7 +10,6 @@
 
 <p>&nbsp;</p>
 
-
 Get started and build your dream web app with Horizon UI, the most trendiest &
 innovative Open Source Admin Template for Chakra UI & React!
 
@@ -30,9 +29,9 @@ Authentication Pages, Profile and so on. Just choose between a Basic Design or a
 cover and you are good to go!
 
 ### 🎉 [NEW] Horizon UI Components
+
 All the main components from both versions, this will help you to see and interact with all & the latest added components of Horizon (also, new components are on the way, stay tuned)! ⚡️
 <a href="https://horizon-ui.com/components/?ref=readme-horizon" target="_blank">See all components</a>
-
 
 ### Documentation
 
@@ -51,7 +50,7 @@ Install Horizon UI by running either of the following:
 Clone the repository with the following command:
 
 ```bash
-git clone https://github.com/horizon-ui/horizon-ui-chakra.git
+git clone https://github.com/chiragsuthar55/Dualwire-admin.git
 ```
 
 Run in terminal this command:
