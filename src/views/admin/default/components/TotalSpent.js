@@ -4,25 +4,27 @@ import {
   Button,
   Flex,
   Icon,
+  Select,
+  Spinner,
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { getDashboardChartData } from "Services/CommonServices";
 // Custom components
 import Card from "components/card/Card.js";
 import LineChart from "components/charts/LineChart";
-import React from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { IoCheckmarkCircle } from "react-icons/io5";
 import { MdBarChart, MdOutlineCalendarToday } from "react-icons/md";
 // Assets
 import { RiArrowUpSFill } from "react-icons/ri";
+import { useDispatch, useSelector } from "react-redux";
 // import {
 //   lineChartDataTotalSpent,
 //   lineChartOptionsTotalSpent,
 // } from "variables/charts";
 
-export default function TotalSpent(props) {
-  const { ...rest } = props;
-
+export default function TotalSpent() {
   // Chakra Color Mode
 
   const textColor = useColorModeValue("secondaryGray.900", "white");
@@ -38,6 +40,115 @@ export default function TotalSpent(props) {
     { bg: "secondaryGray.300" },
     { bg: "whiteAlpha.100" }
   );
+
+  const dispatch = useDispatch();
+
+  const [loading, setLoading] = useState(true);
+  const [duration, setDuration] = useState(1);
+  const [type] = useState("earn"); // earn means money spent by user
+
+  const { dashboardSpentChartData } = useSelector(({ common }) => common);
+
+  const loadData = useCallback(
+    async (duration, type) => {
+      const res = await dispatch(getDashboardChartData(duration, type));
+      if (res) setLoading(false);
+    },
+    [dispatch]
+  );
+  useEffect(() => {
+    setLoading(true);
+    loadData(duration, type);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [duration, type]);
+
+  console.log("dashboardSpentChartData", dashboardSpentChartData);
+  const totalSpent = useMemo(() => {
+    return [
+      {
+        name: "No. of client billed",
+        data: dashboardSpentChartData?.y || [],
+      },
+      // {
+      //   name: "Profit",
+      //   data: [30, 40, 24, 46, 20, 46],
+      // },
+    ];
+  }, [dashboardSpentChartData?.y]);
+
+  const lineChartOptions = {
+    chart: {
+      toolbar: {
+        show: false,
+      },
+      dropShadow: {
+        enabled: true,
+        top: 13,
+        left: 0,
+        blur: 10,
+        opacity: 0.1,
+        color: "#4318FF",
+      },
+    },
+    colors: ["#4318FF", "#39B8FF"],
+    markers: {
+      size: 0,
+      colors: "white",
+      strokeColors: "#7551FF",
+      strokeWidth: 3,
+      strokeOpacity: 0.9,
+      strokeDashArray: 0,
+      fillOpacity: 1,
+      discrete: [],
+      shape: "circle",
+      radius: 2,
+      offsetX: 0,
+      offsetY: 0,
+      showNullDataPoints: true,
+    },
+    tooltip: {
+      theme: "dark",
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    stroke: {
+      curve: "smooth",
+      type: "line",
+    },
+    xaxis: {
+      type: "numeric",
+      categories: dashboardSpentChartData?.x || [],
+      labels: {
+        style: {
+          colors: "#A3AED0",
+          fontSize: "12px",
+          fontWeight: "500",
+        },
+      },
+      axisBorder: {
+        show: false,
+      },
+      axisTicks: {
+        show: false,
+      },
+    },
+    yaxis: {
+      show: false,
+    },
+    legend: {
+      show: false,
+    },
+    grid: {
+      show: false,
+      column: {
+        color: ["#7551FF", "#39B8FF"],
+        opacity: 0.5,
+      },
+    },
+    color: ["#7551FF", "#39B8FF"],
+  };
+
   return (
     <Card
       justifyContent="center"
@@ -45,9 +156,33 @@ export default function TotalSpent(props) {
       direction="column"
       w="100%"
       mb="0px"
-      {...rest}
     >
-      <Flex justify="space-between" ps="0px" pe="20px" pt="5px">
+      <Flex
+        px={{ base: "0px", "2xl": "10px" }}
+        justifyContent="space-between"
+        alignItems="center"
+        w="100%"
+        mb="8px"
+      >
+        <Text color={textColor} fontSize="md" fontWeight="600" mt="4px">
+          Total Spent
+        </Text>
+        <Select
+          fontSize="sm"
+          variant="subtle"
+          width="unset"
+          fontWeight="700"
+          onChange={(e) => {
+            setDuration(e.target.value);
+          }}
+          value={duration || ""}
+        >
+          <option value={1}>Weekly</option>
+          <option value={2}>Monthly</option>
+          <option value={3}>Yearly</option>
+        </Select>
+      </Flex>
+      {/* <Flex justify="space-between" ps="0px" pe="20px" pt="5px">
         <Flex align="center" w="100%">
           <Button
             bg={boxBg}
@@ -75,12 +210,11 @@ export default function TotalSpent(props) {
             h="37px"
             lineHeight="100%"
             borderRadius="10px"
-            {...rest}
           >
             <Icon as={MdBarChart} color={iconColor} w="24px" h="24px" />
           </Button>
         </Flex>
-      </Flex>
+      </Flex> */}
       <Flex w="100%" flexDirection={{ base: "column", lg: "row" }}>
         <Flex flexDirection="column" me="20px" mt="28px">
           <Text
@@ -90,7 +224,7 @@ export default function TotalSpent(props) {
             fontWeight="700"
             lineHeight="100%"
           >
-            $37.5K
+            ${dashboardSpentChartData?.totalBilled}
           </Text>
           <Flex align="center" mb="20px">
             <Text
@@ -118,96 +252,19 @@ export default function TotalSpent(props) {
           </Flex>
         </Flex>
         <Box minH="260px" minW="75%" mt="auto">
-          <LineChart
-            chartData={lineChartDataTotalSpent}
-            chartOptions={lineChartOptionsTotalSpent}
-          />
+          {loading ? (
+            <Flex
+              justifyContent={"center"}
+              alignItems={"center"}
+              minHeight={"165px"}
+            >
+              <Spinner />
+            </Flex>
+          ) : (
+            <LineChart chartData={totalSpent} chartOptions={lineChartOptions} />
+          )}
         </Box>
       </Flex>
     </Card>
   );
 }
-
-export const lineChartDataTotalSpent = [
-  {
-    name: "No. of client billed",
-    data: [50, 64, 48, 66, 49, 68],
-  },
-  // {
-  //   name: "Profit",
-  //   data: [30, 40, 24, 46, 20, 46],
-  // },
-];
-
-export const lineChartOptionsTotalSpent = {
-  chart: {
-    toolbar: {
-      show: false,
-    },
-    dropShadow: {
-      enabled: true,
-      top: 13,
-      left: 0,
-      blur: 10,
-      opacity: 0.1,
-      color: "#4318FF",
-    },
-  },
-  colors: ["#4318FF", "#39B8FF"],
-  markers: {
-    size: 0,
-    colors: "white",
-    strokeColors: "#7551FF",
-    strokeWidth: 3,
-    strokeOpacity: 0.9,
-    strokeDashArray: 0,
-    fillOpacity: 1,
-    discrete: [],
-    shape: "circle",
-    radius: 2,
-    offsetX: 0,
-    offsetY: 0,
-    showNullDataPoints: true,
-  },
-  tooltip: {
-    theme: "dark",
-  },
-  dataLabels: {
-    enabled: false,
-  },
-  stroke: {
-    curve: "smooth",
-    type: "line",
-  },
-  xaxis: {
-    type: "numeric",
-    categories: ["SEP", "OCT", "NOV", "DEC", "JAN", "FEB"],
-    labels: {
-      style: {
-        colors: "#A3AED0",
-        fontSize: "12px",
-        fontWeight: "500",
-      },
-    },
-    axisBorder: {
-      show: false,
-    },
-    axisTicks: {
-      show: false,
-    },
-  },
-  yaxis: {
-    show: false,
-  },
-  legend: {
-    show: false,
-  },
-  grid: {
-    show: false,
-    column: {
-      color: ["#7551FF", "#39B8FF"],
-      opacity: 0.5,
-    },
-  },
-  color: ["#7551FF", "#39B8FF"],
-};

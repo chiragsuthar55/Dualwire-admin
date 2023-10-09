@@ -17,6 +17,7 @@ import Plans from "views/admin/Plans";
 import AddPlan from "views/admin/Plans/AddPlan";
 import Activity from "views/admin/Activity";
 import Billed from "views/admin/Billed";
+import Raffles from "views/admin/Raffles";
 import CustomProfile from "views/admin/profile/CustomProfile";
 import { getProfile } from "Services/AuthServices";
 import ProtectedRoutes from "Helper/ProtectedRoutes";
@@ -75,7 +76,6 @@ const App = () => {
             }
           >
             <Route path={`/`} element={<MainDashboard />} />
-            {/* <Route path={`/data-tables`} element={<DataTables />} /> */}
             <Route path={`/plans`} element={<Plans />} />
             <Route path={`/plans/add-new-plan`} element={<AddPlan />} />
             <Route path={`/plans/:plan_id`} element={<AddPlan />} />
@@ -83,11 +83,44 @@ const App = () => {
             <Route path={`/users`} element={<Users />} />
             <Route path={`/users/:u_id`} element={<AddUser />} />
             <Route path={`/users/add-user`} element={<AddUser />} />
-            <Route path={`/payments`} element={<Billed />} />
-            <Route path={`/payments/:t_id`} element={<PaymentDetails />} />
+            <Route path={`/subscriptions`} element={<Billed />} />
+            <Route path={`/raffles`} element={<Raffles />} />
+            <Route path={`/subscriptions/:t_id`} element={<PaymentDetails />} />
             <Route path={`/profile`} element={<CustomProfile />} />
             <Route path="/*" element={<MainDashboard />} />
           </Route>
+          {/* <Route
+            path={`/sign-in`}
+            element={
+              <AuthIllustration>
+                <SignInCentered />
+              </AuthIllustration>
+            }
+          />
+          <Route
+            path={`/sign-up`}
+            element={
+              <AuthIllustration>
+                <SignUp />
+              </AuthIllustration>
+            }
+          />
+          <Route
+            path={`/forgot-password`}
+            element={
+              <AuthIllustration>
+                <ForgotPassword />
+              </AuthIllustration>
+            }
+          />
+          <Route
+            path={`/reset-password`}
+            element={
+              <AuthIllustration>
+                <ResetPassword />
+              </AuthIllustration>
+            }
+          /> */}
           <Route path="/auth" element={<AuthIllustration />}>
             <Route path={`/auth/sign-in`} element={<SignInCentered />} />
             <Route path={`/auth/sign-up`} element={<SignUp />} />

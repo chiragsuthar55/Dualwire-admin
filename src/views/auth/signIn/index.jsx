@@ -17,11 +17,11 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 // Custom components
-import { HSeparator } from "components/separator/Separator";
+// import { HSeparator } from "components/separator/Separator";
 import DefaultAuth from "layouts/auth/Default";
 // Assets
-import illustration from "assets/img/auth/auth.png";
-import { FcGoogle } from "react-icons/fc";
+// import illustration from "assets/img/auth/auth.png";
+// import { FcGoogle } from "react-icons/fc";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { RiEyeCloseLine } from "react-icons/ri";
 import { useCallback, useEffect, useState } from "react";
@@ -42,15 +42,20 @@ function SignIn() {
   const textColorDetails = useColorModeValue("navy.700", "secondaryGray.600");
   const textColorBrand = useColorModeValue("brand.500", "white");
   const brandStars = useColorModeValue("brand.500", "brand.400");
-  const googleBg = useColorModeValue("secondaryGray.300", "whiteAlpha.200");
-  const googleText = useColorModeValue("navy.700", "white");
-  const googleHover = useColorModeValue(
-    { bg: "gray.200" },
-    { bg: "whiteAlpha.300" }
-  );
-  const googleActive = useColorModeValue(
+  // const googleBg = useColorModeValue("secondaryGray.300", "whiteAlpha.200");
+  // const googleText = useColorModeValue("navy.700", "white");
+  // const googleHover = useColorModeValue(
+  //   { bg: "gray.200" },
+  //   { bg: "whiteAlpha.300" }
+  // );
+  // const googleActive = useColorModeValue(
+  //   { bg: "secondaryGray.300" },
+  //   { bg: "whiteAlpha.200" }
+  // );
+
+  const bgFocus = useColorModeValue(
     { bg: "secondaryGray.300" },
-    { bg: "whiteAlpha.200" }
+    { bg: "whiteAlpha.100" }
   );
   const [show, setShow] = useState(false);
 
@@ -184,6 +189,7 @@ function SignIn() {
                 Email<Text color={brandStars}>*</Text>
               </FormLabel>
               <Input
+                _focus={bgFocus}
                 isRequired={true}
                 variant="auth"
                 fontSize="sm"
@@ -215,6 +221,7 @@ function SignIn() {
               </FormLabel>
               <InputGroup size="md">
                 <Input
+                  _focus={bgFocus}
                   isRequired={true}
                   fontSize="sm"
                   placeholder="Min. 8 characters"

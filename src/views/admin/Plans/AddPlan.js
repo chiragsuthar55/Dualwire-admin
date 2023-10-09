@@ -6,10 +6,12 @@ import {
   FormControl,
   FormLabel,
   Grid,
+  Icon,
   Input,
   Spinner,
   Switch,
   Text,
+  Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
 import { planSchema } from "Schema/PlanSchema";
@@ -21,6 +23,7 @@ import { setSinglePlan } from "Store/Reducers/PlanSlice";
 import Card from "components/card/Card";
 import { useFormik } from "formik";
 import { useCallback, useEffect } from "react";
+import { MdInfoOutline } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -530,212 +533,26 @@ const AddPlan = () => {
               </Box>
             </Grid>
           </Card>
-          {/* <Card>
-              <Grid
-                mb="20px"
-                gridTemplateColumns={{
-                  xl: "repeat(2, 1fr)",
-                  "2xl": "1fr 0.46fr",
-                }}
-                gap={{ base: "20px", xl: "30px" }}
-                display={{ base: "block", xl: "grid" }}
-              >
-                <Box>
-                  <FormLabel
-                    ms="4px"
-                    fontSize="sm"
-                    fontWeight="500"
-                    color={textColor}
-                    display="flex"
-                  >
-                    Limits<Text color={brandStars}>*</Text>
-                  </FormLabel>
-                  <Box px="11px">
-                    <Flex mb="10px">
-                      <Checkbox me="16px" colorScheme="brandScheme" />
-                      <Text
-                        fontWeight="bold"
-                        color={textColor}
-                        fontSize="md"
-                        textAlign="start"
-                      >
-                        Landing Page Design
-                      </Text>
-                    </Flex>
-                    <Flex mb="10px">
-                      <Checkbox
-                        me="16px"
-                        defaultChecked
-                        colorScheme="brandScheme"
-                      />
-                      <Text
-                        fontWeight="bold"
-                        color={textColor}
-                        fontSize="md"
-                        textAlign="start"
-                      >
-                        Dashboard Builder
-                      </Text>
-                    </Flex>
-                    <Flex mb="10px">
-                      <Checkbox
-                        defaultChecked
-                        me="16px"
-                        colorScheme="brandScheme"
-                      />
-                      <Text
-                        fontWeight="bold"
-                        color={textColor}
-                        fontSize="md"
-                        textAlign="start"
-                      >
-                        Mobile App Design
-                      </Text>
-                    </Flex>
-                    <Flex mb="10px">
-                      <Checkbox me="16px" colorScheme="brandScheme" />
-                      <Text
-                        fontWeight="bold"
-                        color={textColor}
-                        fontSize="md"
-                        textAlign="start"
-                      >
-                        Illustrations
-                      </Text>
-                    </Flex>
-                    <Flex mb="10px">
-                      <Checkbox
-                        defaultChecked
-                        me="16px"
-                        colorScheme="brandScheme"
-                      />
-                      <Text
-                        fontWeight="bold"
-                        color={textColor}
-                        fontSize="md"
-                        textAlign="start"
-                      >
-                        Promotional LP
-                      </Text>
-                    </Flex>
-                  </Box>
-                </Box>
-                <Box>
-                  <FormLabel
-                    ms="4px"
-                    fontSize="sm"
-                    fontWeight="500"
-                    color={textColor}
-                    display="flex"
-                  >
-                    Filters & Functions<Text color={brandStars}>*</Text>
-                  </FormLabel>
-                  <Box px="11px">
-                    <Flex mb="10px">
-                      <Checkbox me="16px" colorScheme="brandScheme" />
-                      <Text
-                        fontWeight="bold"
-                        color={textColor}
-                        fontSize="md"
-                        textAlign="start"
-                      >
-                        Video Animation
-                      </Text>
-                    </Flex>
-                    <Flex mb="10px">
-                      <Checkbox
-                        _focus={bgFocus}
-                        me="16px"
-                        defaultChecked
-                        colorScheme="brandScheme"
-                      />
-                      <Text
-                        fontWeight="bold"
-                        color={textColor}
-                        fontSize="md"
-                        textAlign="start"
-                      >
-                        Block List
-                      </Text>
-                    </Flex>
-                    <Flex mb="10px">
-                      <Checkbox
-                        defaultChecked
-                        me="16px"
-                        colorScheme="brandScheme"
-                      />
-                      <Text
-                        fontWeight="bold"
-                        color={textColor}
-                        fontSize="md"
-                        textAlign="start"
-                      >
-                        Custom Countdown
-                      </Text>
-                    </Flex>
-                    <Flex mb="10px">
-                      <Checkbox me="16px" colorScheme="brandScheme" />
-                      <Text
-                        fontWeight="bold"
-                        color={textColor}
-                        fontSize="md"
-                        textAlign="start"
-                      >
-                        Bonus & Chances Extra
-                      </Text>
-                    </Flex>
-                    <Flex mb="10px">
-                      <Checkbox
-                        defaultChecked
-                        me="16px"
-                        colorScheme="brandScheme"
-                      />
-                      <Text
-                        fontWeight="bold"
-                        color={textColor}
-                        fontSize="md"
-                        textAlign="start"
-                      >
-                        Min. of Mentions
-                      </Text>
-                    </Flex>
-                    <Flex mb="10px">
-                      <Checkbox
-                        defaultChecked
-                        me="16px"
-                        colorScheme="brandScheme"
-                      />
-                      <Text
-                        fontWeight="bold"
-                        color={textColor}
-                        fontSize="md"
-                        textAlign="start"
-                      >
-                        Upload from File
-                      </Text>
-                    </Flex>
-                  </Box>
-                </Box>
-              </Grid>
-              <Flex justify="space-between" mb="20px" align="center">
-                <Text
+          <Card>
+            <Grid
+              mb="20px"
+              gridTemplateColumns={{
+                xl: "repeat(2, 1fr)",
+                "2xl": "1fr 0.46fr",
+              }}
+              gap={{ base: "20px", xl: "30px" }}
+              display={{ base: "block", xl: "grid" }}
+            >
+              <Box>
+                <FormLabel
+                  ms="4px"
+                  fontSize="sm"
+                  fontWeight="500"
                   color={textColor}
-                  fontSize="20px"
-                  fontWeight="700"
-                  lineHeight="100%"
+                  display="flex"
                 >
-                  Spin the Wheel (Campaings & Promotions)
-                </Text>
-              </Flex>
-              <Grid
-                mb="20px"
-                gridTemplateColumns={{
-                  xl: "repeat(2, 1fr)",
-                  "2xl": "1fr 0.46fr",
-                }}
-                gap={{ base: "20px", xl: "30px" }}
-                display={{ base: "block", xl: "grid" }}
-              >
+                  Limits<Text color={brandStars}>*</Text>
+                </FormLabel>
                 <Box px="11px">
                   <Flex mb="10px">
                     <Checkbox me="16px" colorScheme="brandScheme" />
@@ -745,7 +562,7 @@ const AddPlan = () => {
                       fontSize="md"
                       textAlign="start"
                     >
-                      Capture Leads
+                      Landing Page Design
                     </Text>
                   </Flex>
                   <Flex mb="10px">
@@ -760,7 +577,7 @@ const AddPlan = () => {
                       fontSize="md"
                       textAlign="start"
                     >
-                      Advanced Customization
+                      Dashboard Builder
                     </Text>
                   </Flex>
                   <Flex mb="10px">
@@ -775,7 +592,7 @@ const AddPlan = () => {
                       fontSize="md"
                       textAlign="start"
                     >
-                      Remove Ads
+                      Mobile App Design
                     </Text>
                   </Flex>
                   <Flex mb="10px">
@@ -786,7 +603,7 @@ const AddPlan = () => {
                       fontSize="md"
                       textAlign="start"
                     >
-                      Form Custom Fields
+                      Illustrations
                     </Text>
                   </Flex>
                   <Flex mb="10px">
@@ -801,137 +618,323 @@ const AddPlan = () => {
                       fontSize="md"
                       textAlign="start"
                     >
-                      Prizes Quantities & Probabilities
-                    </Text>
-                  </Flex>
-                  <Flex mb="10px">
-                    <Checkbox
-                      defaultChecked
-                      me="16px"
-                      colorScheme="brandScheme"
-                    />
-                    <Text
-                      fontWeight="bold"
-                      color={textColor}
-                      fontSize="md"
-                      textAlign="start"
-                    >
-                      Analitycs
-                    </Text>
-                  </Flex>
-                  <Flex mb="10px">
-                    <Checkbox
-                      defaultChecked
-                      me="16px"
-                      colorScheme="brandScheme"
-                    />
-                    <Text
-                      fontWeight="bold"
-                      color={textColor}
-                      fontSize="md"
-                      textAlign="start"
-                    >
-                      Fraud Detection (IP / Browsers)
-                    </Text>
-                  </Flex>
-                  <Flex mb="10px">
-                    <Checkbox
-                      defaultChecked
-                      me="16px"
-                      colorScheme="brandScheme"
-                    />
-                    <Text
-                      fontWeight="bold"
-                      color={textColor}
-                      fontSize="md"
-                      textAlign="start"
-                    >
-                      Winning Emails
-                    </Text>
-                  </Flex>
-                  <Flex mb="10px">
-                    <Checkbox
-                      defaultChecked
-                      me="16px"
-                      colorScheme="brandScheme"
-                    />
-                    <Text
-                      fontWeight="bold"
-                      color={textColor}
-                      fontSize="md"
-                      textAlign="start"
-                    >
-                      Remove AppSorteos Watermark
+                      Promotional LP
                     </Text>
                   </Flex>
                 </Box>
-                <Box>
-                  <FormLabel
-                    display="flex"
-                    ms="4px"
-                    fontSize="sm"
-                    fontWeight="500"
-                    color={textColor}
-                    mb="8px"
-                  >
-                    Active Campaings<Text color={brandStars}>*</Text>
-                  </FormLabel>
-                  <Input
-                    isRequired={true}
-                    variant="auth"
-                    fontSize="sm"
-                    ms={{ base: "0px", md: "0px" }}
-                    type="number"
-                    placeholder="10"
-                    mb="24px"
-                    fontWeight="500"
-                    size="lg"
-                  />
-                  <FormLabel
-                    display="flex"
-                    justifyContent={"space-between"}
-                    ms="4px"
-                    fontSize="sm"
-                    fontWeight="500"
-                    color={textColor}
-                    mb="8px"
-                  >
-                    <Box display={"flex"}>
-                      Montly Pageviews<Text color={brandStars}>*</Text>
-                    </Box>
-                    <Box>
-                      <Tooltip
-                        label={
-                          "Montly Pageviews per each campaing. Pageviews (or impressions) are counted every time the promotion is displayed in a user's browser."
-                        }
-                        placement="bottom"
-                      >
-                        <span>
-                          <Icon
-                            ms="auto"
-                            as={MdInfoOutline}
-                            color="secondaryGray.600"
-                            w="24px"
-                            h="24px"
-                          />
-                        </span>
-                      </Tooltip>
-                    </Box>
-                  </FormLabel>
-                  <Input
-                    isRequired={true}
-                    variant="auth"
-                    fontSize="sm"
-                    ms={{ base: "0px", md: "0px" }}
-                    type="number"
-                    placeholder="10"
-                    mb="24px"
-                    fontWeight="500"
-                    size="lg"
-                  />
+              </Box>
+              <Box>
+                <FormLabel
+                  ms="4px"
+                  fontSize="sm"
+                  fontWeight="500"
+                  color={textColor}
+                  display="flex"
+                >
+                  Filters & Functions<Text color={brandStars}>*</Text>
+                </FormLabel>
+                <Box px="11px">
+                  <Flex mb="10px">
+                    <Checkbox me="16px" colorScheme="brandScheme" />
+                    <Text
+                      fontWeight="bold"
+                      color={textColor}
+                      fontSize="md"
+                      textAlign="start"
+                    >
+                      Video Animation
+                    </Text>
+                  </Flex>
+                  <Flex mb="10px">
+                    <Checkbox
+                      _focus={bgFocus}
+                      me="16px"
+                      defaultChecked
+                      colorScheme="brandScheme"
+                    />
+                    <Text
+                      fontWeight="bold"
+                      color={textColor}
+                      fontSize="md"
+                      textAlign="start"
+                    >
+                      Block List
+                    </Text>
+                  </Flex>
+                  <Flex mb="10px">
+                    <Checkbox
+                      defaultChecked
+                      me="16px"
+                      colorScheme="brandScheme"
+                    />
+                    <Text
+                      fontWeight="bold"
+                      color={textColor}
+                      fontSize="md"
+                      textAlign="start"
+                    >
+                      Custom Countdown
+                    </Text>
+                  </Flex>
+                  <Flex mb="10px">
+                    <Checkbox me="16px" colorScheme="brandScheme" />
+                    <Text
+                      fontWeight="bold"
+                      color={textColor}
+                      fontSize="md"
+                      textAlign="start"
+                    >
+                      Bonus & Chances Extra
+                    </Text>
+                  </Flex>
+                  <Flex mb="10px">
+                    <Checkbox
+                      defaultChecked
+                      me="16px"
+                      colorScheme="brandScheme"
+                    />
+                    <Text
+                      fontWeight="bold"
+                      color={textColor}
+                      fontSize="md"
+                      textAlign="start"
+                    >
+                      Min. of Mentions
+                    </Text>
+                  </Flex>
+                  <Flex mb="10px">
+                    <Checkbox
+                      defaultChecked
+                      me="16px"
+                      colorScheme="brandScheme"
+                    />
+                    <Text
+                      fontWeight="bold"
+                      color={textColor}
+                      fontSize="md"
+                      textAlign="start"
+                    >
+                      Upload from File
+                    </Text>
+                  </Flex>
                 </Box>
-              </Grid>
-            </Card> */}
+              </Box>
+            </Grid>
+            <Flex justify="space-between" mb="20px" align="center">
+              <Text
+                color={textColor}
+                fontSize="20px"
+                fontWeight="700"
+                lineHeight="100%"
+              >
+                Spin the Wheel (Campaings & Promotions)
+              </Text>
+            </Flex>
+            <Grid
+              mb="20px"
+              gridTemplateColumns={{
+                xl: "repeat(2, 1fr)",
+                "2xl": "1fr 0.46fr",
+              }}
+              gap={{ base: "20px", xl: "30px" }}
+              display={{ base: "block", xl: "grid" }}
+            >
+              <Box px="11px">
+                <Flex mb="10px">
+                  <Checkbox me="16px" colorScheme="brandScheme" />
+                  <Text
+                    fontWeight="bold"
+                    color={textColor}
+                    fontSize="md"
+                    textAlign="start"
+                  >
+                    Capture Leads
+                  </Text>
+                </Flex>
+                <Flex mb="10px">
+                  <Checkbox
+                    me="16px"
+                    defaultChecked
+                    colorScheme="brandScheme"
+                  />
+                  <Text
+                    fontWeight="bold"
+                    color={textColor}
+                    fontSize="md"
+                    textAlign="start"
+                  >
+                    Advanced Customization
+                  </Text>
+                </Flex>
+                <Flex mb="10px">
+                  <Checkbox
+                    defaultChecked
+                    me="16px"
+                    colorScheme="brandScheme"
+                  />
+                  <Text
+                    fontWeight="bold"
+                    color={textColor}
+                    fontSize="md"
+                    textAlign="start"
+                  >
+                    Remove Ads
+                  </Text>
+                </Flex>
+                <Flex mb="10px">
+                  <Checkbox me="16px" colorScheme="brandScheme" />
+                  <Text
+                    fontWeight="bold"
+                    color={textColor}
+                    fontSize="md"
+                    textAlign="start"
+                  >
+                    Form Custom Fields
+                  </Text>
+                </Flex>
+                <Flex mb="10px">
+                  <Checkbox
+                    defaultChecked
+                    me="16px"
+                    colorScheme="brandScheme"
+                  />
+                  <Text
+                    fontWeight="bold"
+                    color={textColor}
+                    fontSize="md"
+                    textAlign="start"
+                  >
+                    Prizes Quantities & Probabilities
+                  </Text>
+                </Flex>
+                <Flex mb="10px">
+                  <Checkbox
+                    defaultChecked
+                    me="16px"
+                    colorScheme="brandScheme"
+                  />
+                  <Text
+                    fontWeight="bold"
+                    color={textColor}
+                    fontSize="md"
+                    textAlign="start"
+                  >
+                    Analitycs
+                  </Text>
+                </Flex>
+                <Flex mb="10px">
+                  <Checkbox
+                    defaultChecked
+                    me="16px"
+                    colorScheme="brandScheme"
+                  />
+                  <Text
+                    fontWeight="bold"
+                    color={textColor}
+                    fontSize="md"
+                    textAlign="start"
+                  >
+                    Fraud Detection (IP / Browsers)
+                  </Text>
+                </Flex>
+                <Flex mb="10px">
+                  <Checkbox
+                    defaultChecked
+                    me="16px"
+                    colorScheme="brandScheme"
+                  />
+                  <Text
+                    fontWeight="bold"
+                    color={textColor}
+                    fontSize="md"
+                    textAlign="start"
+                  >
+                    Winning Emails
+                  </Text>
+                </Flex>
+                <Flex mb="10px">
+                  <Checkbox
+                    defaultChecked
+                    me="16px"
+                    colorScheme="brandScheme"
+                  />
+                  <Text
+                    fontWeight="bold"
+                    color={textColor}
+                    fontSize="md"
+                    textAlign="start"
+                  >
+                    Remove AppSorteos Watermark
+                  </Text>
+                </Flex>
+              </Box>
+              <Box>
+                <FormLabel
+                  display="flex"
+                  ms="4px"
+                  fontSize="sm"
+                  fontWeight="500"
+                  color={textColor}
+                  mb="8px"
+                >
+                  Active Campaings<Text color={brandStars}>*</Text>
+                </FormLabel>
+                <Input
+                  isRequired={true}
+                  variant="auth"
+                  fontSize="sm"
+                  ms={{ base: "0px", md: "0px" }}
+                  type="number"
+                  placeholder="10"
+                  mb="24px"
+                  fontWeight="500"
+                  size="lg"
+                />
+                <FormLabel
+                  display="flex"
+                  justifyContent={"space-between"}
+                  ms="4px"
+                  fontSize="sm"
+                  fontWeight="500"
+                  color={textColor}
+                  mb="8px"
+                >
+                  <Box display={"flex"}>
+                    Montly Pageviews<Text color={brandStars}>*</Text>
+                  </Box>
+                  <Box>
+                    <Tooltip
+                      label={
+                        "Montly Pageviews per each campaing. Pageviews (or impressions) are counted every time the promotion is displayed in a user's browser."
+                      }
+                      placement="bottom"
+                    >
+                      <span>
+                        <Icon
+                          ms="auto"
+                          as={MdInfoOutline}
+                          color="secondaryGray.600"
+                          w="24px"
+                          h="24px"
+                        />
+                      </span>
+                    </Tooltip>
+                  </Box>
+                </FormLabel>
+                <Input
+                  isRequired={true}
+                  variant="auth"
+                  fontSize="sm"
+                  ms={{ base: "0px", md: "0px" }}
+                  type="number"
+                  placeholder="10"
+                  mb="24px"
+                  fontWeight="500"
+                  size="lg"
+                />
+              </Box>
+            </Grid>
+          </Card>
 
           <Box display={"flex"} justifyContent={"end"} p={"20px"}>
             <Box w={"100px"} marginRight={"20px"}>

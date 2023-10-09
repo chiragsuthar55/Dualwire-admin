@@ -10,8 +10,6 @@ const Users = () => {
   const [page, setPage] = useState(0);
   const { usersLoading, usersList } = useSelector(({ users }) => users);
 
-  console.log("page", page);
-
   useEffect(() => {
     dispatch(getUsersList(page + 1));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -31,7 +29,6 @@ const Users = () => {
           pageLength={usersList?.per_page}
           gotoPage={setPage}
           pageIndex={usersList?.current_page - 1}
-          // tableData={data}
         />
       </Box>
     </>

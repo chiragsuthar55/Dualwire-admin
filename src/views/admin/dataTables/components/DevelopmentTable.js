@@ -4,7 +4,7 @@ import {
   Button,
   Flex,
   Icon,
-  Spinner,
+  Skeleton,
   Switch,
   Table,
   Tbody,
@@ -14,7 +14,6 @@ import {
   Thead,
   Tr,
   useColorModeValue,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { getPaymentStatus } from "Helper/Common";
 import TablePagination from "components/TablePagination";
@@ -82,8 +81,6 @@ export default function DevelopmentTable({
     setPageSize,
     selectedFlatRows,
     state: { pageSize },
-    // state: { pageIndex, pageSize },
-    // gotoPage,
   } = tableInstance;
   initialState.pageSize = 10;
 
@@ -93,12 +90,6 @@ export default function DevelopmentTable({
   let activeColor = useColorModeValue("green.500", "white");
   let inactiveColor = useColorModeValue("red.500", "secondaryGray.600");
   const textColorPrimary = useColorModeValue("secondaryGray.900", "white");
-
-  const {
-    isOpen: isOpen1,
-    onOpen: onOpen1,
-    onClose: onClose1,
-  } = useDisclosure();
 
   const onEdit = useCallback(
     (id) => {
@@ -131,11 +122,7 @@ export default function DevelopmentTable({
     [tableData]
   );
 
-  return loading ? (
-    <Flex justifyContent={"center"} alignItems={"center"}>
-      <Spinner size="xl" />
-    </Flex>
-  ) : (
+  return (
     <Card
       direction="column"
       w="100%"
@@ -162,20 +149,6 @@ export default function DevelopmentTable({
             >
               {name}
             </Text>
-            {/* <Box>
-              <FormControl color={iconColor}>
-                <Select
-                  color={iconColor}
-                  id="user_type"
-                  w="unset"
-                  display="flex"
-                  alignItems="center"
-                >
-                  <option value={"pdf"}>Export PDF</option>
-                  <option value={"excel"}>Export Excel</option>
-                </Select>
-              </FormControl>
-            </Box> */}
             {editable && (
               <Button onClick={() => navigate(path || "/")}>
                 <Icon as={MdAddTask} color={iconColor} w="24px" h="24px" />
@@ -191,232 +164,251 @@ export default function DevelopmentTable({
           >
             <Thead>
               {headerGroups.map((headerGroup, index) => (
-                <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
-                  {headerGroup.headers.map((column, index) => (
-                    <Th
-                      {...column.getHeaderProps(column.getSortByToggleProps())}
-                      pe="10px"
-                      key={index}
-                      borderColor={borderColor}
-                    >
-                      <Flex
-                        justify="space-between"
-                        align="center"
-                        fontSize={{ sm: "10px", lg: "12px" }}
-                        color="gray.400"
-                      >
-                        {column.render("Header")}
-                      </Flex>
-                    </Th>
-                  ))}
-                </Tr>
+                <>
+                  {loading ? (
+                    <Skeleton height="30px" />
+                  ) : (
+                    <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
+                      {headerGroup.headers.map((column, index) => (
+                        <Th
+                          {...column.getHeaderProps(
+                            column.getSortByToggleProps()
+                          )}
+                          pe="10px"
+                          key={index}
+                          borderColor={borderColor}
+                        >
+                          <Flex
+                            justify="space-between"
+                            align="center"
+                            fontSize={{ sm: "10px", lg: "12px" }}
+                            color="gray.400"
+                          >
+                            {column.render("Header")}
+                          </Flex>
+                        </Th>
+                      ))}
+                    </Tr>
+                  )}
+                </>
               ))}
             </Thead>
             <Tbody {...getTableBodyProps()}>
-              {page.map((row, index) => {
-                prepareRow(row);
-                return (
-                  <Tr {...row.getRowProps()} key={index}>
-                    {row.cells.map((cell, index) => {
-                      let data = "";
-                      if (
-                        cell.column.Header === "NAME" ||
-                        cell.column.Header === "FIRST NAME" ||
-                        cell.column.Header === "LAST NAME" ||
-                        cell.column.Header === "EMAIL" ||
-                        cell.column.Header === "DESCRIPTION" ||
-                        cell.column.Header === "CURRENCY" ||
-                        cell.column.Header === "PRICE MONTHLY" ||
-                        cell.column.Header === "TRANSACTION ID" ||
-                        cell.column.Header === "RECIPIENT" ||
-                        cell.column.Header === "DATE & TIME" ||
-                        cell.column.Header === "JOINED DATE" ||
-                        cell.column.Header === "PRICE YEARLY" ||
-                        cell.column.Header === "JOINED DATE" ||
-                        cell.column.Header === "PLAN"
-                      ) {
-                        data = (
-                          <Text
-                            color={textColor}
-                            fontSize="sm"
-                            fontWeight="700"
-                          >
-                            {cell.value}
-                          </Text>
-                        );
-                        //                 // }
-                        //                 // else if (cell.column.Header === "TECH") {
-                        //                 // data = (
-                        //                 //   <Flex align="center">
-                        //                 //     {cell.value.map((item, key) => {
-                        //                 //       if (item === "apple") {
-                        //                 //         return (
-                        //                 //           <AppleLogo
-                        //                 //             key={key}
-                        //                 //             color={iconColor}
-                        //                 //             me="16px"
-                        //                 //             h="18px"
-                        //                 //             w="15px"
-                        //                 //           />
-                        //                 //         );
-                        //                 //       } else if (item === "android") {
-                        //                 //         return (
-                        //                 //           <AndroidLogo
-                        //                 //             key={key}
-                        //                 //             color={iconColor}
-                        //                 //             me="16px"
-                        //                 //             h="18px"
-                        //                 //             w="16px"
-                        //                 //           />
-                        //                 //         );
-                        //                 //       } else if (item === "windows") {
-                        //                 //         return (
-                        //                 //           <WindowsLogo
-                        //                 //             key={key}
-                        //                 //             color={iconColor}
-                        //                 //             h="18px"
-                        //                 //             w="19px"
-                        //                 //           />
-                        //                 //         );
-                        //                 //       }
-                        //                 //     })}
-                        //                 //   </Flex>
-                        //                 // );
-                        //                 // }
-                        //                 // else if (cell.column.Header === "DATE") {
-                        //                 //   data = (
-                        //                 //     <Text color={textColor} fontSize="sm" fontWeight="700">
-                        //                 //       {cell.value}
-                        //                 //     </Text>
-                        //                 //   );
-
-                        //                 // } else if (cell.column.Header === "PROGRESS") {
-                        //                 //   data = (
-                        //                 //     <Flex align="center">
-                        //                 //       <Text
-                        //                 //         me="10px"
-                        //                 //         color={textColor}
-                        //                 //         fontSize="sm"
-                        //                 //         fontWeight="700"
-                        //                 //       >
-                        //                 //         {cell.value}%
-                        //                 //       </Text>
-                        //                 //       <Progress
-                        //                 //         variant="table"
-                        //                 //         colorScheme="brandScheme"
-                        //                 //         h="8px"
-                        //                 //         w="63px"
-                        //                 //         value={cell.value}
-                        //                 //       />
-                        //                 //     </Flex>
-                        //                 //   );
-                      } else if (cell.column.Header === "STATUS") {
-                        data = (
-                          <Flex align="center">
-                            {typeof cell.value === "number" ? (
-                              <>
+              {loading ? (
+                <Box>
+                  <Skeleton
+                    height="30px"
+                    marginBottom={"20px"}
+                    marginTop={"20px"}
+                  />
+                  <Skeleton
+                    height="30px"
+                    marginBottom={"20px"}
+                    marginTop={"20px"}
+                  />
+                  <Skeleton
+                    height="30px"
+                    marginBottom={"20px"}
+                    marginTop={"20px"}
+                  />
+                  <Skeleton
+                    height="30px"
+                    marginBottom={"20px"}
+                    marginTop={"20px"}
+                  />
+                  <Skeleton
+                    height="30px"
+                    marginBottom={"20px"}
+                    marginTop={"20px"}
+                  />
+                  <Skeleton
+                    height="30px"
+                    marginBottom={"20px"}
+                    marginTop={"20px"}
+                  />
+                  <Skeleton
+                    height="30px"
+                    marginBottom={"20px"}
+                    marginTop={"20px"}
+                  />
+                  <Skeleton
+                    height="30px"
+                    marginBottom={"20px"}
+                    marginTop={"20px"}
+                  />
+                  <Skeleton
+                    height="30px"
+                    marginBottom={"20px"}
+                    marginTop={"20px"}
+                  />
+                  <Skeleton
+                    height="30px"
+                    marginBottom={"20px"}
+                    marginTop={"20px"}
+                  />
+                </Box>
+              ) : (
+                page.map((row, index) => {
+                  prepareRow(row);
+                  return (
+                    <Tr {...row.getRowProps()} key={index}>
+                      {row.cells.map((cell, index) => {
+                        let data = "";
+                        if (
+                          cell.column.Header === "NAME" ||
+                          cell.column.Header === "USERNAME" ||
+                          cell.column.Header === "LOGOUT TIME" ||
+                          cell.column.Header === "LOGIN TIME" ||
+                          cell.column.Header === "IP ADDRESS" ||
+                          cell.column.Header === "COUNTRY" ||
+                          cell.column.Header === "SUBSCRIPTION ID" ||
+                          cell.column.Header === "RECIPIENT" ||
+                          cell.column.Header === "AVG TIME SPENDED" ||
+                          cell.column.Header === "FIRST NAME" ||
+                          cell.column.Header === "LAST NAME" ||
+                          cell.column.Header === "EMAIL" ||
+                          cell.column.Header === "AMOUNT" ||
+                          cell.column.Header === "PLAN INTERVAL" ||
+                          cell.column.Header === "CUSTOMER EMAIL" ||
+                          cell.column.Header === "PLAN PERIOD END" ||
+                          cell.column.Header === "PLAN PERIOD START" ||
+                          cell.column.Header === "DESCRIPTION" ||
+                          cell.column.Header === "CURRENCY" ||
+                          cell.column.Header === "PRICE MONTHLY" ||
+                          cell.column.Header === "USER STATUS" ||
+                          cell.column.Header === "TRANSACTION ID" ||
+                          cell.column.Header === "RECIPIENT" ||
+                          cell.column.Header === "DATE & TIME" ||
+                          cell.column.Header === "JOINED DATE" ||
+                          cell.column.Header === "COMMENTS" ||
+                          cell.column.Header === "TITLE" ||
+                          cell.column.Header === "WINNER" ||
+                          cell.column.Header === "CHANNEL TITLE" ||
+                          cell.column.Header === "PRICE YEARLY" ||
+                          cell.column.Header === "JOINED DATE" ||
+                          cell.column.Header === "PLAN"
+                        ) {
+                          data = (
+                            <Text
+                              color={textColor}
+                              fontSize="sm"
+                              fontWeight="700"
+                            >
+                              {cell.value}
+                            </Text>
+                          );
+                        } else if (cell.column.Header === "STATUS") {
+                          data = (
+                            <Flex align="center">
+                              {typeof cell.value === "number" ? (
+                                <>
+                                  <Icon
+                                    w="20px"
+                                    h="20px"
+                                    me="5px"
+                                    color={
+                                      cell.value === 1
+                                        ? "green.500"
+                                        : cell.value === 2 || cell.value === 0
+                                        ? "red.500"
+                                        : cell.value === 3
+                                        ? "orange.500"
+                                        : null
+                                    }
+                                    as={
+                                      cell.value === 1
+                                        ? MdCheckCircle
+                                        : cell.value === 2 || cell.value === 0
+                                        ? MdCancel
+                                        : cell.value === 3
+                                        ? MdOutlineError
+                                        : null
+                                    }
+                                  />
+                                  <Text
+                                    color={textColor}
+                                    fontSize="sm"
+                                    fontWeight="700"
+                                  >
+                                    {getPaymentStatus(
+                                      cell.value,
+                                      name === "Subscriptions"
+                                        ? "Success"
+                                        : "Active"
+                                    )}
+                                  </Text>
+                                </>
+                              ) : cell.value ? (
                                 <Icon
-                                  w="20px"
-                                  h="20px"
-                                  me="5px"
-                                  color={
-                                    cell.value === 1
-                                      ? "green.500"
-                                      : cell.value === 2
-                                      ? "red.500"
-                                      : cell.value === 3
-                                      ? "orange.500"
-                                      : null
-                                  }
-                                  as={
-                                    cell.value === 1
-                                      ? MdCheckCircle
-                                      : cell.value === 2
-                                      ? MdCancel
-                                      : cell.value === 3
-                                      ? MdOutlineError
-                                      : null
-                                  }
+                                  as={MdCheckCircle}
+                                  width="20px"
+                                  height="20px"
+                                  color={activeColor}
                                 />
-                                <Text
-                                  color={textColor}
-                                  fontSize="sm"
-                                  fontWeight="700"
-                                >
-                                  {getPaymentStatus(
-                                    cell.value,
-                                    name === "Payments" ? "Success" : "Active"
-                                  )}
-                                </Text>
-                              </>
-                            ) : cell.value ? (
-                              <Icon
-                                as={MdCheckCircle}
-                                width="20px"
-                                height="20px"
-                                color={activeColor}
-                              />
-                            ) : (
-                              <Icon
-                                as={MdCancel}
-                                width="20px"
-                                height="20px"
-                                color={inactiveColor}
-                              />
-                            )}
-                          </Flex>
-                        );
-                      } else if (cell.column.Header === "PLAN STATUS") {
-                        data = (
-                          <Switch
-                            isChecked={cell.value}
-                            variant="main"
-                            colorScheme="brandScheme"
-                            size="md"
-                            onChange={() =>
-                              onChangeStatusOfPlan(
-                                row?.id,
-                                !cell.value,
-                                row.original.id
-                              )
-                            }
-                          />
-                        );
-                      } else if (cell.column.Header === "ACTION") {
-                        data = (
-                          <Flex align="center">
-                            <CustomMenu
-                              onDelete={onDelete}
-                              onEdit={onEdit}
-                              onView={onView}
-                              data={tableData[row.id]}
-                              module={pathname}
+                              ) : (
+                                <Icon
+                                  as={MdCancel}
+                                  width="20px"
+                                  height="20px"
+                                  color={inactiveColor}
+                                />
+                              )}
+                            </Flex>
+                          );
+                        } else if (cell.column.Header === "PLAN STATUS") {
+                          data = (
+                            <Switch
+                              isChecked={cell.value}
+                              variant="main"
+                              colorScheme="brandScheme"
+                              size="md"
+                              onChange={() =>
+                                onChangeStatusOfPlan(
+                                  row?.id,
+                                  !cell.value,
+                                  row.original.id
+                                )
+                              }
                             />
-                          </Flex>
+                          );
+                        } else if (cell.column.Header === "ACTION") {
+                          data = (
+                            <Flex align="center">
+                              <CustomMenu
+                                onDelete={onDelete}
+                                onEdit={onEdit}
+                                onView={onView}
+                                data={tableData[row.id]}
+                                module={pathname}
+                              />
+                            </Flex>
+                          );
+                        }
+                        return (
+                          <Td
+                            {...cell.getCellProps()}
+                            key={index}
+                            fontSize={{ sm: "14px" }}
+                            minW={{
+                              sm: "150px",
+                              md: "200px",
+                              lg: "auto",
+                            }}
+                            paddingBottom={"10px"}
+                            paddingTop={"10px"}
+                            w={
+                              cell.column.Header === "ACTION" ? "100px" : "auto"
+                            }
+                            borderColor="transparent"
+                          >
+                            {data}
+                          </Td>
                         );
-                      }
-                      return (
-                        <Td
-                          {...cell.getCellProps()}
-                          key={index}
-                          fontSize={{ sm: "14px" }}
-                          minW={{
-                            sm: "150px",
-                            md: "200px",
-                            lg: "auto",
-                          }}
-                          paddingBottom={"10px"}
-                          paddingTop={"10px"}
-                          w={cell.column.Header === "ACTION" ? "100px" : "auto"}
-                          borderColor="transparent"
-                        >
-                          {data}
-                        </Td>
-                      );
-                    })}
-                  </Tr>
-                );
-              })}
+                      })}
+                    </Tr>
+                  );
+                })
+              )}
             </Tbody>
           </Table>
         </Box>
@@ -431,9 +423,7 @@ export default function DevelopmentTable({
         nextPage={nextPage}
         gotoPage={gotoPage}
         pageLength={pageLength}
-        // pageLength={page?.length}
         dataLength={dataLength}
-        // dataLength={data?.length}
         selectedItemsLength={selectedFlatRows?.length}
       />
     </Card>

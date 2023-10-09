@@ -15,7 +15,7 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import AdminNavbarLinks from "components/navbar/NavbarLinksAdmin";
 import { useLocation } from "react-router-dom";
 import { MdHome } from "react-icons/md";
-import routes from "routes";
+// import routes from "routes";
 
 export default function AdminNavbar(props) {
   const { pathname } = useLocation();
@@ -35,7 +35,7 @@ export default function AdminNavbar(props) {
   let secondaryText = useColorModeValue("gray.700", "white");
   let navbarPosition = "fixed";
   let navbarFilter = "none";
-  let navbarBackdrop = "blur(20px)";
+  // let navbarBackdrop = "blur(20px)";
   let navbarShadow = "none";
   let navbarBg = useColorModeValue(
     "rgba(244, 247, 254, 0.2)",
@@ -99,7 +99,8 @@ export default function AdminNavbar(props) {
       bg={navbarBg}
       borderColor={navbarBorder}
       filter={navbarFilter}
-      backdropFilter={navbarBackdrop}
+      // backdropFilter={navbarBackdrop}
+      backdropFilter={"auto"}
       backgroundPosition="center"
       backgroundSize="cover"
       borderRadius="16px"

@@ -193,57 +193,6 @@ export const changePassword = (payload) => async (dispatch) => {
 };
 
 /**
- * @desc Forget Password
- */
-export const forgetPassword = (payload) => async (dispatch) => {
-  try {
-    if (payload) {
-      dispatch(setAuthLoading(true));
-      const response = await axios.post(`/forget_password`, payload);
-
-      const { success, message } = response.data;
-      if (success) {
-        toast.success(message);
-        return true;
-      } else {
-        toast.error(message);
-        return false;
-      }
-    }
-  } catch (e) {
-    toast.error(renderMsg(e));
-    return false;
-  } finally {
-    dispatch(setAuthLoading(false));
-  }
-};
-/**
- * @desc Reset Password
- */
-export const resetPassword = (payload) => async (dispatch) => {
-  try {
-    if (payload) {
-      dispatch(setAuthLoading(true));
-      const response = await axios.post(`/reset_password`, payload);
-
-      const { success, message } = response.data;
-      if (success) {
-        toast.success(message);
-        return true;
-      } else {
-        toast.error(message);
-        return false;
-      }
-    }
-  } catch (e) {
-    toast.error(renderMsg(e));
-    return false;
-  } finally {
-    dispatch(setAuthLoading(false));
-  }
-};
-
-/**
  * @desc  Get New Token After Older One Expires
  * @param payload (existing User token)
  */
@@ -261,6 +210,58 @@ export const getNewToken = () => async (dispatch) => {
         toast.success(message);
         dispatch(setLoginData(data));
         dispatch(setUserCookies(JSON.stringify(data)));
+        return true;
+      } else {
+        toast.error(message);
+        return false;
+      }
+    }
+  } catch (e) {
+    toast.error(renderMsg(e));
+    return false;
+  } finally {
+    dispatch(setAuthLoading(false));
+  }
+};
+
+/**
+ * @desc Forgot Password
+ */
+export const forgotPassword = (payload) => async (dispatch) => {
+  try {
+    if (payload) {
+      dispatch(setAuthLoading(true));
+      const response = await axios.post(`/forgot_password`, payload);
+
+      const { success, message } = response.data;
+      if (success) {
+        toast.success(message);
+        return true;
+      } else {
+        toast.error(message);
+        return false;
+      }
+    }
+  } catch (e) {
+    toast.error(renderMsg(e));
+    return false;
+  } finally {
+    dispatch(setAuthLoading(false));
+  }
+};
+
+/**
+ * @desc Reset Password
+ */
+export const resetPassword = (payload) => async (dispatch) => {
+  try {
+    if (payload) {
+      dispatch(setAuthLoading(true));
+      const response = await axios.post(`/reset_password`, payload);
+
+      const { success, message } = response.data;
+      if (success) {
+        toast.success(message);
         return true;
       } else {
         toast.error(message);

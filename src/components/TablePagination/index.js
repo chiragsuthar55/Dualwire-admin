@@ -1,5 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
-import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -51,10 +49,8 @@ export default function TablePagination({
     );
     return { start, end, pageRange };
   };
-  console.log("pageIndex", pageIndex);
 
   const { start, end, pageRange } = generatePageRange();
-  console.log("end", end === pageIndex);
   const iconColor = useColorModeValue("brand.500", "white");
 
   return (
@@ -107,7 +103,7 @@ export default function TablePagination({
             onClick={() => {
               // previousPage();
               // if (pageIndex === 0) return;
-              gotoPage(start === pageIndex ? pageIndex : pageIndex--);
+              gotoPage(start === pageIndex ? pageIndex : pageIndex - 1);
               //   setPageDataInQuery(pageIndex - 1);
             }}
             disabled={start === pageIndex}
@@ -120,8 +116,8 @@ export default function TablePagination({
               <Button
                 color={start === pageIndex ? iconColor : "black"}
                 onClick={() => {
+                  gotoPage(0);
                   //   setPerPageItem(0);
-                  gotoPage(1);
                 }}
               >
                 1
@@ -148,7 +144,7 @@ export default function TablePagination({
               {end < dataLength / pageSize - 2 && <span>...</span>}
               <Button
                 className={end === pageIndex ? iconColor : "black"}
-                onClick={() => gotoPage(Math.ceil(dataLength / pageSize))}
+                onClick={() => gotoPage(Math.ceil(dataLength / pageSize) - 1)}
                 // onClick={() => gotoPage(Math.ceil(dataLength / pageSize) - 1)}
               >
                 {Math.ceil(dataLength / pageSize)}
@@ -163,7 +159,7 @@ export default function TablePagination({
             onClick={() => {
               // nextPage();
               //   setPageDataInQuery(pageIndex + 1);
-              gotoPage(end === pageIndex ? pageIndex : ++pageIndex);
+              gotoPage(end === pageIndex ? pageIndex : pageIndex + 1);
             }}
             disabled={end === pageIndex}
           >

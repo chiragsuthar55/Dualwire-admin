@@ -1,5 +1,8 @@
+import { formattedDateWithTime } from "Helper/Common";
 import { renderMsg } from "Helper/Common";
 import { setPlans } from "Store/Reducers/PlanSlice";
+import { setRafflesList } from "Store/Reducers/PlanSlice";
+import { setSubscriptionsList } from "Store/Reducers/PlanSlice";
 import { setSinglePlan } from "Store/Reducers/PlanSlice";
 import { setPlanLoading } from "Store/Reducers/PlanSlice";
 import axios from "axios";
@@ -143,3 +146,85 @@ export const createPlan = (payload) => async (dispatch) => {
     dispatch(setPlanLoading(false));
   }
 };
+
+/**
+ * @desc  Get Subscriptions List
+ */
+export const getSubscriptionsList =
+  (page = 1) =>
+  async (dispatch) => {
+    try {
+      if (page) {
+        dispatch(setPlanLoading(true));
+        const response = await axios.get(
+          `/admin/get_subscription?page=${page}`
+        );
+
+        const { success, data, message } = response.data;
+
+        if (success) {
+          const updated = {
+            ...data,
+            records: data?.records?.map((x) => {
+              return {
+                ...x,
+                statusStr: x?.status === "canceled" ? 2 : 1,
+                amount: `${x?.amount} ${x?.paid_amount_currency}`,
+                recipient: `${x?.first_name} ${x?.last_name}`,
+                plan_period_start: formattedDateWithTime(x?.plan_period_start),
+                plan_period_end: formattedDateWithTime(x?.plan_period_end),
+              };
+            }),
+          };
+          dispatch(setSubscriptionsList(updated));
+          return true;
+        } else {
+          toast.error(message);
+          return false;
+        }
+      }
+    } catch (e) {
+      toast.error(renderMsg(e));
+      return false;
+    } finally {
+      dispatch(setPlanLoading(false));
+    }
+  };
+
+/**
+ * @desc  Get Raffles List
+ */
+export const getRafflesList =
+  (page = 1) =>
+  async (dispatch) => {
+    try {
+      if (page) {
+        dispatch(setPlanLoading(true));
+        const response = await axios.get(`/admin/get_raffles?page=${page}`);
+
+        const { success, data, message } = response.data;
+
+        if (success) {
+          const updated = {
+            ...data,
+            records: data?.records?.map((x) => {
+              return {
+                ...x,
+              };
+            }),
+          };
+          console.log("updated", updated);
+          dispatch(setRafflesList(updated));
+          return true;
+        } else {
+          toast.error(message);
+          return false;
+        }
+      }
+    } catch (e) {
+      toast.error(renderMsg(e));
+      return false;
+    } finally {
+      dispatch(setPlanLoading(false));
+    }
+  };

@@ -11,6 +11,7 @@ let initialState = {
     password: "",
     status: 0,
   },
+  userActivityList: [],
 };
 
 const usersSlice = createSlice({
@@ -26,10 +27,17 @@ const usersSlice = createSlice({
     setSingleUser: (state, action) => {
       state.singleUser = action.payload;
     },
+    setUserActivityList: (state, action) => {
+      state.userActivityList = action.payload;
+    },
   },
 });
 
-export const { setUsersLoading, setUsersList, setSingleUser } =
-  usersSlice.actions;
+export const {
+  setUsersLoading,
+  setUsersList,
+  setSingleUser,
+  setUserActivityList,
+} = usersSlice.actions;
 
 export default usersSlice.reducer;
