@@ -17,6 +17,12 @@ innovative Open Source Admin Template for Chakra UI & React!
 
 ### Introduction
 
+DualWire.com it's an online and free tool to create Instagram Giveaways, Sweepstakes, Contests and Promotions, allowing you to pick a random comment from social media platforms
+
+Create free Giveaways from Instagram, Facebook, Youtube. Pick a random comment winner from your photos and videos.
+
+----------------------------------- Horizon -----------------------------------
+
 Designed for those who like modern UI elements and beautiful websites. Made of
 hundred of elements, designed blocks and fully coded pages, Horizon UI is ready
 to help you create stunning websites and webapps.
@@ -63,6 +69,12 @@ Then run this command to start your local server
 
 ```bash
 npm start
+```
+
+Then run this command to create static build
+
+```bash
+npm run build
 ```
 
 ### Example Pages
