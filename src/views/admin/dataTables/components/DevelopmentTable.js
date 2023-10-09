@@ -4,6 +4,7 @@ import {
   Button,
   Flex,
   Icon,
+  Select,
   Skeleton,
   Switch,
   Table,
@@ -25,7 +26,9 @@ import {
   MdAddTask,
   MdCancel,
   MdCheckCircle,
+  MdImportExport,
   MdOutlineError,
+  MdPictureAsPdf,
 } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
@@ -37,6 +40,9 @@ import {
 import { setPlans } from "Store/Reducers/PlanSlice";
 import { useDispatch } from "react-redux";
 import { updateStatusOfPlan } from "Services/PlanService";
+import { chartColor } from "views/admin/default/components/PieCard";
+import { IoSend } from "react-icons/io5";
+import { FaFileExcel, FaFilePdf, FaRegFilePdf } from "react-icons/fa";
 
 export default function DevelopmentTable({
   loading,
@@ -85,6 +91,15 @@ export default function DevelopmentTable({
   initialState.pageSize = 10;
 
   const textColor = useColorModeValue("secondaryGray.900", "white");
+  const bgButton = useColorModeValue("secondaryGray.300", "whiteAlpha.100");
+  const bgHover = useColorModeValue(
+    { bg: "secondaryGray.400" },
+    { bg: "whiteAlpha.50" }
+  );
+  const bgFocus = useColorModeValue(
+    { bg: "secondaryGray.300" },
+    { bg: "whiteAlpha.100" }
+  );
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.100");
   const iconColor = useColorModeValue("brand.500", "white");
   let activeColor = useColorModeValue("green.500", "white");
@@ -99,6 +114,7 @@ export default function DevelopmentTable({
     },
     [pathname]
   );
+
   const onDelete = useCallback((id) => {}, []);
 
   const onView = useCallback(
@@ -149,12 +165,51 @@ export default function DevelopmentTable({
             >
               {name}
             </Text>
-            {editable && (
-              <Button onClick={() => navigate(path || "/")}>
-                <Icon as={MdAddTask} color={iconColor} w="24px" h="24px" />
-                &nbsp; Add New {name}
-              </Button>
-            )}
+
+            <Flex>
+              {editable && (
+                <Button
+                  onClick={() => navigate(path || "/")}
+                  me={"10px"}
+                  borderRadius={"10px"}
+                >
+                  <Icon as={MdAddTask} color={iconColor} w="24px" h="24px" />
+                  &nbsp; Add New {name}
+                </Button>
+              )}
+              {/* <Select
+                _focus={bgFocus}
+                _hover={bgHover}
+                color={iconColor}
+                id="user_type"
+                w="unset"
+                display="flex"
+                alignItems="center"
+                defaultValue="Weekly"
+                me={"10px"}
+              >
+                <option value={1}>Active</option>
+                <option value={0}>InActive</option>
+              </Select> */}
+              <Box>
+                <Button
+                  paddingLeft={"5px"}
+                  paddingRight={"5px"}
+                  onClick={() => navigate(path || "/")}
+                  borderRadius={"10px"}
+                >
+                  <Icon as={FaFilePdf} color={iconColor} w="20px" h="20px" />
+                </Button>
+                <Button
+                  paddingLeft={"5px"}
+                  paddingRight={"5px"}
+                  onClick={() => navigate(path || "/")}
+                  borderRadius={"10px"}
+                >
+                  <Icon as={FaFileExcel} color={iconColor} w="20px" h="20px" />
+                </Button>
+              </Box>
+            </Flex>
           </Flex>
           <Table
             {...getTableProps()}
@@ -250,10 +305,18 @@ export default function DevelopmentTable({
                   />
                 </Box>
               ) : (
-                page.map((row, index) => {
+                page.map((row, j) => {
                   prepareRow(row);
                   return (
-                    <Tr {...row.getRowProps()} key={index}>
+                    <Tr
+                      {...row.getRowProps()}
+                      key={j}
+                      _hover={bgHover}
+                      cursor={
+                        name === "Plans" || name === "Users" ? "pointer" : false
+                      }
+                      onClick={() => onEdit(tableData?.[row?.id]?.id)}
+                    >
                       {row.cells.map((cell, index) => {
                         let data = "";
                         if (
@@ -293,6 +356,11 @@ export default function DevelopmentTable({
                           data = (
                             <Text
                               color={textColor}
+                              // color={
+                              //   cell.column.Header === "NAME"
+                              //     ? chartColor[j]
+                              //     : textColor
+                              // }
                               fontSize="sm"
                               fontWeight="700"
                             >
@@ -406,12 +474,11 @@ export default function DevelopmentTable({
                               md: "14px",
                               lg: "16px",
                             }}
-                            // paddingBottom={"16px"}
-                            // paddingTop={"16px"}
                             w={
                               cell.column.Header === "ACTION" ? "100px" : "auto"
                             }
-                            borderColor="transparent"
+                            borderColor={borderColor}
+                            // borderColor="transparent"
                           >
                             {data}
                           </Td>

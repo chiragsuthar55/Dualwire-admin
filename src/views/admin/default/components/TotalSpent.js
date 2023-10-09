@@ -242,12 +242,12 @@ export default function TotalSpent() {
             </Flex> */}
           </Flex>
 
-          <Flex align="center">
+          {/* <Flex align="center">
             <Icon as={IoCheckmarkCircle} color="green.500" me="4px" />
             <Text color="green.500" fontSize="md" fontWeight="700">
               On track
             </Text>
-          </Flex>
+          </Flex> */}
         </Flex>
         <Box minH="260px" minW="75%" mt="auto">
           {loading ? (
