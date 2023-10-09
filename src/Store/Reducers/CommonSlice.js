@@ -11,6 +11,9 @@ let initialState = {
     dob: "",
   },
   changePasswordValues: { new_password: "", password: "", old_password: "" },
+  dashboardRafflesChartData: {},
+  dashboardSpentChartData: {},
+  dashboardUserChartData: {},
 };
 
 const commonSlice = createSlice({
@@ -26,10 +29,26 @@ const commonSlice = createSlice({
     setChangePassword: (state, action) => {
       state.changePasswordValues = action.payload;
     },
+    setDashboardRafflesChartData: (state, action) => {
+      state.dashboardRafflesChartData = action.payload;
+    },
+    setDashboardUserChartData: (state, action) => {
+      state.dashboardUserChartData = action.payload;
+    },
+    setDashboardSpentChartData: (state, action) => {
+      state.dashboardSpentChartData = action.payload;
+    },
   },
 });
 
-export const { setLoading, setCurrentUser, setChangePassword } =
-  commonSlice.actions;
+export const {
+  setLoading,
+  setCurrentUser,
+  setChangePassword,
+  setDashboardRafflesChartData,
+  setDashboardUserChartData,
+  setDashboardChartData,
+  setDashboardSpentChartData,
+} = commonSlice.actions;
 
 export default commonSlice.reducer;

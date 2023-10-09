@@ -1,6 +1,7 @@
 import { formattedDateWithTime } from "Helper/Common";
 import { renderMsg } from "Helper/Common";
 import { setSingleUser } from "Store/Reducers/UsersSlice";
+import { setUserActivityList } from "Store/Reducers/UsersSlice";
 import { setUsersList } from "Store/Reducers/UsersSlice";
 import { setUsersLoading } from "Store/Reducers/UsersSlice";
 import axios from "axios";
@@ -118,3 +119,40 @@ export const createUser = (payload) => async (dispatch) => {
     dispatch(setUsersLoading(false));
   }
 };
+
+/**
+ * @desc  Get User Activity List
+ */
+export const getUserActivityList =
+  (page = 1) =>
+  async (dispatch) => {
+    try {
+      dispatch(setUsersLoading(true));
+      const response = await axios.get(`/admin/activity?page=${page}`);
+
+      const { success, message, data } = response.data;
+      if (success) {
+        const updated = {
+          ...data,
+          records: data?.records?.map((x) => {
+            return {
+              ...x,
+              logout_time: formattedDateWithTime(x?.logout_time),
+              logon_time: formattedDateWithTime(x?.logon_time),
+            };
+          }),
+        };
+
+        dispatch(setUserActivityList(updated));
+        return true;
+      } else {
+        toast.error(message);
+        return false;
+      }
+    } catch (e) {
+      toast.error(renderMsg(e));
+      return false;
+    } finally {
+      dispatch(setUsersLoading(false));
+    }
+  };

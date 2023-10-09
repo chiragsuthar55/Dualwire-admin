@@ -27,11 +27,10 @@ import { useCallback, useState } from "react";
 import { MdEdit, MdOutlineRemoveRedEye } from "react-icons/md";
 import { RiEyeCloseLine } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const CustomProfile = () => {
   const [show, setShow] = useState(false);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const textColorSecondary = "gray.400";
@@ -39,22 +38,22 @@ const CustomProfile = () => {
   const textColorBrand = useColorModeValue("brand.500", "white");
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const brandStars = useColorModeValue("brand.500", "brand.400");
-  const textHover = useColorModeValue(
-    { color: "secondaryGray.900", bg: "unset" },
-    { color: "secondaryGray.500", bg: "unset" }
-  );
-  const bgColor = "linear-gradient(135deg, #868CFF 0%, #4318FF 100%)";
-  const iconColor = useColorModeValue("brand.500", "white");
-  const bgList = useColorModeValue("white", "whiteAlpha.100");
-  const bgShadow = useColorModeValue(
-    "14px 17px 40px 4px rgba(112, 144, 176, 0.08)",
-    "unset"
-  );
-  const bgButton = useColorModeValue("secondaryGray.300", "whiteAlpha.100");
-  const bgHover = useColorModeValue(
-    { bg: "secondaryGray.400" },
-    { bg: "whiteAlpha.50" }
-  );
+  // const textHover = useColorModeValue(
+  //   { color: "secondaryGray.900", bg: "unset" },
+  //   { color: "secondaryGray.500", bg: "unset" }
+  // );
+  // const bgColor = "linear-gradient(135deg, #868CFF 0%, #4318FF 100%)";
+  // const iconColor = useColorModeValue("brand.500", "white");
+  // const bgList = useColorModeValue("white", "whiteAlpha.100");
+  // const bgShadow = useColorModeValue(
+  //   "14px 17px 40px 4px rgba(112, 144, 176, 0.08)",
+  //   "unset"
+  // );
+  // const bgButton = useColorModeValue("secondaryGray.300", "whiteAlpha.100");
+  // const bgHover = useColorModeValue(
+  //   { bg: "secondaryGray.400" },
+  //   { bg: "whiteAlpha.50" }
+  // );
   const bgFocus = useColorModeValue(
     { bg: "secondaryGray.300" },
     { bg: "whiteAlpha.100" }

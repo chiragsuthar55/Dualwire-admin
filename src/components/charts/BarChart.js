@@ -20,11 +20,11 @@ class ColumnChart extends Component {
   render() {
     return (
       <Chart
-        options={this.state.chartOptions}
-        series={this.state.chartData}
-        type='bar'
-        width='100%'
-        height='100%'
+        options={this.state?.chartOptions}
+        series={this.state?.chartData}
+        type="bar"
+        width="100%"
+        height="100%"
       />
     );
   }

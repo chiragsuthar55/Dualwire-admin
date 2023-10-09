@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 // Chakra imports
 import {
   Box,
@@ -12,6 +12,7 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Spinner,
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
@@ -25,16 +26,22 @@ import { useFormik } from "formik";
 import { setResetPasswordValues } from "Store/Reducers/AuthSlice";
 import { resetPasswordSchema } from "Schema/AuthSchema";
 import { resetPassword } from "Services/AuthServices";
+import { forgotPassword } from "Services/AuthServices";
 
 function ResetPassword() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [searchParams] = useSearchParams();
+
+  let email = searchParams?.get("email");
+  let token = searchParams?.get("token");
+
   // Chakra color mode
   const textColor = useColorModeValue("navy.700", "white");
   const textColorSecondary = "gray.400";
-  const textColorDetails = useColorModeValue("navy.700", "secondaryGray.600");
-  const textColorBrand = useColorModeValue("brand.500", "white");
   const brandStars = useColorModeValue("brand.500", "brand.400");
+  const textColorBrand = useColorModeValue("brand.500", "white");
+  // const textColorDetails = useColorModeValue("navy.700", "secondaryGray.600");
 
   const [show, setShow] = useState(false);
 
@@ -42,23 +49,46 @@ function ResetPassword() {
 
   const submitHandle = useCallback(
     async (values) => {
-      const res = await dispatch(resetPassword(values));
+      const payload = {
+        token,
+        email,
+        password: values?.newPassword,
+        password_confirmation: values?.confirmPassword,
+      };
+      const res = await dispatch(resetPassword(payload));
       if (res) {
         dispatch(
           setResetPasswordValues({ confirmPassword: "", newPassword: "" })
         );
+        navigate("/auth/sign-in");
+      }
+    },
+    [dispatch, email, navigate, token]
+  );
+
+  const {
+    handleBlur,
+    handleChange,
+    errors,
+    values,
+    touched,
+    handleSubmit,
+    resetForm,
+  } = useFormik({
+    enableReinitialize: true,
+    initialValues: resetPasswordValues,
+    validationSchema: resetPasswordSchema,
+    onSubmit: submitHandle,
+  });
+
+  const onForgotPassword = useCallback(
+    async (email) => {
+      const res = await dispatch(forgotPassword({ email })); //add email here
+      if (res) {
       }
     },
     [dispatch]
   );
-
-  const { handleBlur, handleChange, errors, values, touched, handleSubmit } =
-    useFormik({
-      enableReinitialize: true,
-      initialValues: resetPasswordValues,
-      validationSchema: resetPasswordSchema,
-      onSubmit: submitHandle,
-    });
 
   return (
     <DefaultAuth>
@@ -177,6 +207,24 @@ function ResetPassword() {
                 </Text>
               )}
             </Box>
+            <Box
+              marginRight={"20px"}
+              display={"flex"}
+              alignItems={"center"}
+              mb={"24px"}
+            >
+              <Text>Didn’t receive the email?</Text> &nbsp;
+              <Text
+                color={textColorBrand}
+                fontSize="sm"
+                w="124px"
+                fontWeight="500"
+                cursor={"pointer"}
+                onClick={() => onForgotPassword(email)}
+              >
+                Click here {authLoading && <Spinner />}
+              </Text>
+            </Box>
             <Button
               fontSize="sm"
               variant="brand"
@@ -188,7 +236,7 @@ function ResetPassword() {
               disabled={authLoading}
               onClick={handleSubmit}
             >
-              Reset Password
+              Reset Password {authLoading && <Spinner />}
             </Button>
             <Button
               fontSize="sm"
@@ -198,7 +246,10 @@ function ResetPassword() {
               h="42"
               mb="24px"
               disabled={authLoading}
-              onClick={() => navigate(-1)}
+              onClick={() => {
+                navigate(-1);
+                resetForm();
+              }}
             >
               Cancel
             </Button>

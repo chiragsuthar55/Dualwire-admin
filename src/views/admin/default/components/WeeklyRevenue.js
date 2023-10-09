@@ -1,25 +1,25 @@
 // Chakra imports
 import {
   Box,
-  Button,
   Flex,
-  Icon,
+  Select,
+  Spinner,
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { getDashboardChartData } from "Services/CommonServices";
+import { setRafflesLoading } from "Store/Reducers/CommonSlice";
 import Card from "components/card/Card.js";
 // Custom components
 import BarChart from "components/charts/BarChart";
-import React from "react";
+import React, { memo, useCallback, useEffect, useMemo, useState } from "react";
 // import {
 //   barChartDataConsumption,
 //   barChartOptionsConsumption,
 // } from "variables/charts";
-import { MdBarChart } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
 
-export default function WeeklyRevenue(props) {
-  const { ...rest } = props;
-
+const WeeklyRevenue = memo(() => {
   // Chakra Color Mode
   const textColor = useColorModeValue("secondaryGray.900", "white");
   const iconColor = useColorModeValue("brand.500", "white");
@@ -32,8 +32,134 @@ export default function WeeklyRevenue(props) {
     { bg: "secondaryGray.300" },
     { bg: "whiteAlpha.100" }
   );
+
+  const dispatch = useDispatch();
+
+  const [loading, setLoading] = useState(true);
+  const [duration, setDuration] = useState(1);
+  const [type] = useState("raffle");
+
+  const { dashboardRafflesChartData } = useSelector(({ common }) => common);
+
+  const loadData = useCallback(
+    async (duration, type) => {
+      const res = await dispatch(getDashboardChartData(duration, type));
+      if (res) setLoading(false);
+    },
+    [dispatch]
+  );
+
+  useEffect(() => {
+    setLoading(true);
+    loadData(duration, type);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [duration, type]);
+
+  const chartOptions = useMemo(() => {
+    return {
+      chart: {
+        stacked: true,
+        toolbar: {
+          show: false,
+        },
+      },
+      tooltip: {
+        style: {
+          fontSize: "12px",
+          fontFamily: undefined,
+        },
+        onDatasetHover: {
+          style: {
+            fontSize: "12px",
+            fontFamily: undefined,
+          },
+        },
+        theme: "dark",
+      },
+      xaxis: {
+        categories: dashboardRafflesChartData?.x || [],
+        show: false,
+        labels: {
+          show: true,
+          style: {
+            colors: "#A3AED0",
+            fontSize: "14px",
+            fontWeight: "500",
+          },
+        },
+        axisBorder: {
+          show: false,
+        },
+        axisTicks: {
+          show: false,
+        },
+      },
+      yaxis: {
+        show: false,
+        color: "black",
+        labels: {
+          show: false,
+          style: {
+            colors: "#A3AED0",
+            fontSize: "14px",
+            fontWeight: "500",
+          },
+        },
+      },
+
+      grid: {
+        borderColor: "rgba(163, 174, 208, 0.3)",
+        show: true,
+        yaxis: {
+          lines: {
+            show: false,
+            opacity: 0.5,
+          },
+        },
+        row: {
+          opacity: 0.5,
+        },
+        xaxis: {
+          lines: {
+            show: false,
+          },
+        },
+      },
+      fill: {
+        type: "solid",
+        colors: ["#5E37FF", "#6AD2FF", "#E1E9F8"],
+      },
+      legend: {
+        show: false,
+      },
+      colors: ["#5E37FF", "#6AD2FF", "#E1E9F8"],
+      dataLabels: {
+        enabled: false,
+      },
+      plotOptions: {
+        bar: {
+          borderRadius: 10,
+          columnWidth: "20px",
+        },
+      },
+    };
+  }, [dashboardRafflesChartData?.x]);
+
+  const chartData = useMemo(() => {
+    return [
+      {
+        name: "Total Raffles Done",
+        data: dashboardRafflesChartData?.y || [],
+      },
+      {
+        name: "Winners",
+        data: dashboardRafflesChartData?.z || [],
+      },
+    ];
+  }, [dashboardRafflesChartData?.y, dashboardRafflesChartData?.z]);
+
   return (
-    <Card align="center" direction="column" w="100%" {...rest}>
+    <Card align="center" direction="column" w="100%">
       <Flex align="center" w="100%" px="15px" py="10px">
         <Text
           me="auto"
@@ -44,128 +170,124 @@ export default function WeeklyRevenue(props) {
         >
           Number of Raffles Done
         </Text>
-        <Button
-          align="center"
-          justifyContent="center"
-          bg={bgButton}
-          _hover={bgHover}
-          _focus={bgFocus}
-          _active={bgFocus}
-          w="37px"
-          h="37px"
-          lineHeight="100%"
-          borderRadius="10px"
-          {...rest}
+        <Select
+          fontSize="sm"
+          variant="subtle"
+          width="unset"
+          fontWeight="700"
+          onChange={(e) => {
+            setDuration(e.target.value);
+          }}
+          value={duration || ""}
         >
-          <Icon as={MdBarChart} color={iconColor} w="24px" h="24px" />
-        </Button>
+          <option value={1}>Weekly</option>
+          <option value={2}>Monthly</option>
+          <option value={3}>Yearly</option>
+        </Select>
       </Flex>
 
       <Box h="240px" mt="auto">
-        <BarChart
-          chartData={barChartDataConsumption}
-          chartOptions={barChartOptionsConsumption}
-        />
+        {loading ? (
+          <Flex
+            justifyContent={"center"}
+            alignItems={"center"}
+            minHeight={"165px"}
+          >
+            <Spinner />
+          </Flex>
+        ) : (
+          <BarChart chartData={chartData} chartOptions={chartOptions} />
+        )}
       </Box>
     </Card>
   );
-}
+});
+export default WeeklyRevenue;
 
-const barChartDataConsumption = [
-  {
-    name: "Total Raffles Done",
-    data: [400, 370, 330, 390, 320, 350, 360, 320, 380],
-  },
-  {
-    name: "Winners",
-    data: [400, 370, 330, 390, 320, 350, 360, 320, 380],
-  },
-];
+// const barChartOptionsConsumption = {
+//   chart: {
+//     stacked: true,
+//     toolbar: {
+//       show: false,
+//     },
+//   },
+//   tooltip: {
+//     style: {
+//       fontSize: "12px",
+//       fontFamily: undefined,
+//     },
+//     onDatasetHover: {
+//       style: {
+//         fontSize: "12px",
+//         fontFamily: undefined,
+//       },
+//     },
+//     theme: "dark",
+//   },
+//   xaxis: {
+//     categories: ["17", "18", "19", "20", "21", "22", "23", "24", "25"],
+//     show: false,
+//     labels: {
+//       show: true,
+//       style: {
+//         colors: "#A3AED0",
+//         fontSize: "14px",
+//         fontWeight: "500",
+//       },
+//     },
+//     axisBorder: {
+//       show: false,
+//     },
+//     axisTicks: {
+//       show: false,
+//     },
+//   },
+//   yaxis: {
+//     show: false,
+//     color: "black",
+//     labels: {
+//       show: false,
+//       style: {
+//         colors: "#A3AED0",
+//         fontSize: "14px",
+//         fontWeight: "500",
+//       },
+//     },
+//   },
 
-const barChartOptionsConsumption = {
-  chart: {
-    stacked: true,
-    toolbar: {
-      show: false,
-    },
-  },
-  tooltip: {
-    style: {
-      fontSize: "12px",
-      fontFamily: undefined,
-    },
-    onDatasetHover: {
-      style: {
-        fontSize: "12px",
-        fontFamily: undefined,
-      },
-    },
-    theme: "dark",
-  },
-  xaxis: {
-    categories: ["17", "18", "19", "20", "21", "22", "23", "24", "25"],
-    show: false,
-    labels: {
-      show: true,
-      style: {
-        colors: "#A3AED0",
-        fontSize: "14px",
-        fontWeight: "500",
-      },
-    },
-    axisBorder: {
-      show: false,
-    },
-    axisTicks: {
-      show: false,
-    },
-  },
-  yaxis: {
-    show: false,
-    color: "black",
-    labels: {
-      show: false,
-      style: {
-        colors: "#A3AED0",
-        fontSize: "14px",
-        fontWeight: "500",
-      },
-    },
-  },
-
-  grid: {
-    borderColor: "rgba(163, 174, 208, 0.3)",
-    show: true,
-    yaxis: {
-      lines: {
-        show: false,
-        opacity: 0.5,
-      },
-    },
-    row: {
-      opacity: 0.5,
-    },
-    xaxis: {
-      lines: {
-        show: false,
-      },
-    },
-  },
-  fill: {
-    type: "solid",
-    colors: ["#5E37FF", "#6AD2FF", "#E1E9F8"],
-  },
-  legend: {
-    show: false,
-  },
-  colors: ["#5E37FF", "#6AD2FF", "#E1E9F8"],
-  dataLabels: {
-    enabled: false,
-  },
-  plotOptions: {
-    bar: {
-      borderRadius: 10,
-      columnWidth: "20px",
-    },
-  },
-};
+//   grid: {
+//     borderColor: "rgba(163, 174, 208, 0.3)",
+//     show: true,
+//     yaxis: {
+//       lines: {
+//         show: false,
+//         opacity: 0.5,
+//       },
+//     },
+//     row: {
+//       opacity: 0.5,
+//     },
+//     xaxis: {
+//       lines: {
+//         show: false,
+//       },
+//     },
+//   },
+//   fill: {
+//     type: "solid",
+//     colors: ["#5E37FF", "#6AD2FF", "#E1E9F8"],
+//   },
+//   legend: {
+//     show: false,
+//   },
+//   colors: ["#5E37FF", "#6AD2FF", "#E1E9F8"],
+//   dataLabels: {
+//     enabled: false,
+//   },
+//   plotOptions: {
+//     bar: {
+//       borderRadius: 10,
+//       columnWidth: "20px",
+//     },
+//   },
+// };

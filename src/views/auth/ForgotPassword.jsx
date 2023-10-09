@@ -4,29 +4,30 @@ import { NavLink, useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
-  Checkbox,
+  // Checkbox,
+  // Icon,
+  // InputGroup,
+  // InputRightElement,
   Flex,
   FormControl,
   FormLabel,
   Heading,
-  Icon,
   Input,
-  InputGroup,
-  InputRightElement,
+  Spinner,
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
 // Custom components
-import { HSeparator } from "components/separator/Separator";
+// import { HSeparator } from "components/separator/Separator";
 import DefaultAuth from "layouts/auth/Default";
 // Assets
-import { FcGoogle } from "react-icons/fc";
-import { MdOutlineRemoveRedEye } from "react-icons/md";
-import { RiEyeCloseLine } from "react-icons/ri";
+// import { FcGoogle } from "react-icons/fc";
+// import { MdOutlineRemoveRedEye } from "react-icons/md";
+// import { RiEyeCloseLine } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
-import { forgetPassword } from "Services/AuthServices";
 import { useFormik } from "formik";
 import { forgetPasswordSchema } from "Schema/AuthSchema";
+import { forgotPassword } from "Services/AuthServices";
 
 function ForgotPassword() {
   const navigate = useNavigate();
@@ -34,27 +35,33 @@ function ForgotPassword() {
   // Chakra color mode
   const textColor = useColorModeValue("navy.700", "white");
   const textColorSecondary = "gray.400";
-  const textColorDetails = useColorModeValue("navy.700", "secondaryGray.600");
   const textColorBrand = useColorModeValue("brand.500", "white");
   const brandStars = useColorModeValue("brand.500", "brand.400");
-  const googleBg = useColorModeValue("secondaryGray.300", "whiteAlpha.200");
-  const googleText = useColorModeValue("navy.700", "white");
-  const googleHover = useColorModeValue(
-    { bg: "gray.200" },
-    { bg: "whiteAlpha.300" }
-  );
-  const googleActive = useColorModeValue(
+  // const textColorDetails = useColorModeValue("navy.700", "secondaryGray.600");
+  // const googleBg = useColorModeValue("secondaryGray.300", "whiteAlpha.200");
+  // const googleText = useColorModeValue("navy.700", "white");
+  // const googleHover = useColorModeValue(
+  //   { bg: "gray.200" },
+  //   { bg: "whiteAlpha.300" }
+  // );
+  // const googleActive = useColorModeValue(
+  //   { bg: "secondaryGray.300" },
+  //   { bg: "whiteAlpha.200" }
+  // );
+
+  const bgFocus = useColorModeValue(
     { bg: "secondaryGray.300" },
-    { bg: "whiteAlpha.200" }
+    { bg: "whiteAlpha.100" }
   );
 
   const [email, setEmail] = useState("");
+  const [data, setdata] = useState("");
 
   const { authLoading } = useSelector(({ auth }) => auth);
 
   const submitHandle = useCallback(
     async (values) => {
-      const res = await dispatch(forgetPassword(values));
+      const res = await dispatch(forgotPassword(values));
       if (res) {
         setEmail("");
       }
@@ -123,6 +130,7 @@ function ForgotPassword() {
                 Email<Text color={brandStars}>*</Text>
               </FormLabel>
               <Input
+                _focus={bgFocus}
                 isRequired={true}
                 variant="auth"
                 fontSize="sm"
@@ -142,35 +150,6 @@ function ForgotPassword() {
                 </Text>
               )}
             </Box>
-            {/* <FormLabel
-              ms="4px"
-              fontSize="sm"
-              fontWeight="500"
-              color={textColor}
-              display="flex"
-            >
-              Password<Text color={brandStars}>*</Text>
-            </FormLabel> */}
-            {/* <InputGroup size="md">
-              <Input
-                isRequired={true}
-                fontSize="sm"
-                placeholder="Min. 8 characters"
-                mb="24px"
-                size="lg"
-                type={show ? "text" : "password"}
-                variant="auth"
-              />
-              <InputRightElement display="flex" alignItems="center" mt="4px">
-                <Icon
-                  color={textColorSecondary}
-                  _hover={{ cursor: "pointer" }}
-                  as={show ? RiEyeCloseLine : MdOutlineRemoveRedEye}
-                  onClick={handleClick}
-                />
-              </InputRightElement>
-            </InputGroup> */}
-
             <Button
               fontSize="sm"
               variant="brand"
@@ -182,7 +161,7 @@ function ForgotPassword() {
               disabled={authLoading}
               onClick={handleSubmit}
             >
-              Send reset link
+              Send reset link {authLoading && <Spinner />}
             </Button>
             <Box
               marginRight={"20px"}

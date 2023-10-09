@@ -9,13 +9,14 @@ import {
   SimpleGrid,
   // useColorModeValue,
 } from "@chakra-ui/react";
+
+// import MiniCalendar from "components/calendar/MiniCalendar";
 // Assets
 // import Usa from "assets/img/dashboards/usa.png";
 // // Custom components
 // import MiniCalendar from "components/calendar/MiniCalendar";
 // import MiniStatistics from "components/card/MiniStatistics";
 // import IconBox from "components/icons/IconBox";
-import React from "react";
 // import {
 //   MdAddTask,
 //   MdAttachMoney,
@@ -40,6 +41,7 @@ export default function UserReports() {
   // Chakra Color Mode
   // const brandColor = useColorModeValue("brand.500", "white");
   // const boxBg = useColorModeValue("secondaryGray.300", "whiteAlpha.100");
+
   return (
     <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>
       {/* <SimpleGrid
@@ -145,8 +147,8 @@ export default function UserReports() {
         <SimpleGrid columns={{ base: 1, md: 2, xl: 2 }} gap="20px">
           <Tasks />
           <MiniCalendar h="100%" minW="100%" selectRange={false} />
-        </SimpleGrid>
-      </SimpleGrid> */}
+          </SimpleGrid>
+        </SimpleGrid> */}
     </Box>
   );
 }

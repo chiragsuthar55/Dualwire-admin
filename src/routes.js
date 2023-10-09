@@ -27,6 +27,7 @@ import Activity from "views/admin/Activity";
 import Billed from "views/admin/Billed";
 import Users from "views/admin/Users";
 import PaymentDetails from "views/admin/Billed/PaymentDetails";
+import { AiFillSlackCircle } from "react-icons/ai";
 
 const routes = [
   {
@@ -63,17 +64,26 @@ const routes = [
     component: <Activity />,
   },
   {
-    name: "Payments",
+    name: "Subscriptions",
     layout: "/admin",
     icon: <Icon as={MdPayment} width="20px" height="20px" color="inherit" />,
-    path: "/payments",
+    path: "/subscriptions",
     component: <Billed />,
   },
   {
-    name: "Payments",
-    layout: "/admin/payments/view",
+    name: "Subscriptions",
+    layout: "/admin/subscriptions/view",
     icon: <Icon as={MdPayment} width="20px" height="20px" color="inherit" />,
-    path: "/payments",
+    path: "/subscriptions",
+    component: <PaymentDetails />,
+  },
+  {
+    name: "Raffles",
+    layout: "/admin",
+    icon: (
+      <Icon as={AiFillSlackCircle} width="20px" height="20px" color="inherit" />
+    ),
+    path: "/raffles",
     component: <PaymentDetails />,
   },
   {
