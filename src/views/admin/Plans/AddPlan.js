@@ -6,12 +6,12 @@ import {
   FormControl,
   FormLabel,
   Grid,
-  Icon,
   Input,
   Spinner,
   Switch,
   Text,
-  Tooltip,
+  // Icon,
+  // Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
 import { planSchema } from "Schema/PlanSchema";
@@ -23,7 +23,7 @@ import { setSinglePlan } from "Store/Reducers/PlanSlice";
 import Card from "components/card/Card";
 import { useFormik } from "formik";
 import { useCallback, useEffect } from "react";
-import { MdInfoOutline } from "react-icons/md";
+// import { MdInfoOutline } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -533,7 +533,7 @@ const AddPlan = () => {
               </Box>
             </Grid>
           </Card>
-          <Card>
+          {/* <Card>
             <Grid
               mb="20px"
               gridTemplateColumns={{
@@ -934,7 +934,7 @@ const AddPlan = () => {
                 />
               </Box>
             </Grid>
-          </Card>
+          </Card> */}
 
           <Box display={"flex"} justifyContent={"end"} p={"20px"}>
             <Box w={"100px"} marginRight={"20px"}>

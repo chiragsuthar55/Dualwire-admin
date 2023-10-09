@@ -16,7 +16,18 @@ import { VSeparator } from "components/separator/Separator";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-export const chartColor = ["#6AD2FF", "#5333E3"];
+export const chartColor = [
+  "#6AD2FF",
+  "#5333E3",
+  "#3965FF",
+  "#01B574",
+  "#FFB547",
+  "#D53F8C",
+  "#EE5D50",
+  "#805AD5",
+  "#D69E2E",
+  "#319795",
+];
 
 export default function Conversion({ data }) {
   // Chakra Color Mode
@@ -25,6 +36,15 @@ export default function Conversion({ data }) {
   const cardShadow = useColorModeValue(
     "0px 18px 40px rgba(112, 144, 176, 0.12)",
     "unset"
+  );
+  const iconColor = useColorModeValue("brand.500", "white");
+  const bgHover = useColorModeValue(
+    { bg: "secondaryGray.400" },
+    { bg: "whiteAlpha.50" }
+  );
+  const bgFocus = useColorModeValue(
+    { bg: "secondaryGray.300" },
+    { bg: "whiteAlpha.100" }
   );
 
   const dispatch = useDispatch();
@@ -52,7 +72,7 @@ export default function Conversion({ data }) {
   const pieChartOptions = useMemo(() => {
     return {
       labels: dashboardUserChartData?.pie_chart?.labels || [],
-      colors: ["#6AD2FF", "#5333E3"],
+      colors: chartColor,
       chart: {
         width: "50px",
       },
@@ -81,7 +101,7 @@ export default function Conversion({ data }) {
         },
       },
       fill: {
-        colors: ["#6AD2FF", "#5333E3"],
+        colors: chartColor,
       },
       tooltip: {
         enabled: true,
@@ -103,8 +123,11 @@ export default function Conversion({ data }) {
           Account Type Statistics
         </Text>
         <Select
+          _focus={bgFocus}
+          _hover={bgHover}
+          color={iconColor}
           fontSize="sm"
-          variant="subtle"
+          // variant="subtle"
           width="unset"
           fontWeight="700"
           onChange={(e) => {
@@ -151,7 +174,7 @@ export default function Conversion({ data }) {
                   <Box
                     h="8px"
                     w="8px"
-                    bg="brand.500"
+                    bg={chartColor[i]}
                     borderRadius="50%"
                     me="4px"
                   />

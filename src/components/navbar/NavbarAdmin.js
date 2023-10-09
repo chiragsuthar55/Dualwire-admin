@@ -31,11 +31,13 @@ export default function AdminNavbar(props) {
   });
 
   // Here are all the props that may change depending on navbar's type or state.(secondary, variant, scrolled)
+  // let mainText = useColorModeValue("white", "navy.700");
   let mainText = useColorModeValue("navy.700", "white");
   let secondaryText = useColorModeValue("gray.700", "white");
+  // let secondaryText = useColorModeValue("white", "gray.700");
   let navbarPosition = "fixed";
   let navbarFilter = "none";
-  // let navbarBackdrop = "blur(20px)";
+  let navbarBackdrop = "blur(20px)";
   let navbarShadow = "none";
   let navbarBg = useColorModeValue(
     "rgba(244, 247, 254, 0.2)",
@@ -45,6 +47,7 @@ export default function AdminNavbar(props) {
   let secondaryMargin = "0px";
   let paddingX = "15px";
   let gap = "0px";
+  const brandColor = useColorModeValue("brand.500", "white");
 
   const changeNavbar = useCallback(() => {
     if (window.scrollY > 1) {
@@ -96,11 +99,12 @@ export default function AdminNavbar(props) {
     <Box
       position={navbarPosition}
       boxShadow={navbarShadow}
+      // bg={brandColor}
       bg={navbarBg}
       borderColor={navbarBorder}
       filter={navbarFilter}
-      // backdropFilter={navbarBackdrop}
-      backdropFilter={"auto"}
+      backdropFilter={navbarBackdrop}
+      // backdropFilter={"auto"}
       backgroundPosition="center"
       backgroundSize="cover"
       borderRadius="16px"
