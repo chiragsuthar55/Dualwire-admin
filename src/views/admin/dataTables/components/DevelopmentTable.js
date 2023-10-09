@@ -179,10 +179,12 @@ export default function DevelopmentTable({
                           borderColor={borderColor}
                         >
                           <Flex
+                            color={iconColor}
+                            fontWeight={800}
                             justify="space-between"
                             align="center"
                             fontSize={{ sm: "10px", lg: "12px" }}
-                            color="gray.400"
+                            // color="gray.400"
                           >
                             {column.render("Header")}
                           </Flex>
@@ -394,8 +396,18 @@ export default function DevelopmentTable({
                               md: "200px",
                               lg: "auto",
                             }}
-                            paddingBottom={"10px"}
-                            paddingTop={"10px"}
+                            paddingBottom={{
+                              sm: "10px",
+                              md: "14px",
+                              lg: "16px",
+                            }}
+                            paddingTop={{
+                              sm: "10px",
+                              md: "14px",
+                              lg: "16px",
+                            }}
+                            // paddingBottom={"16px"}
+                            // paddingTop={"16px"}
                             w={
                               cell.column.Header === "ACTION" ? "100px" : "auto"
                             }

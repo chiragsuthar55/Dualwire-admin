@@ -63,8 +63,8 @@ export const getDashboardChartData =
         } else {
           const updated = {
             ...data,
-            x: data?.raffle?.earn?.map((y) => y?.x),
-            y: data?.raffle?.earn?.map((y) => y?.y),
+            x: data?.bar_chart?.earn?.map((y) => y?.x),
+            y: data?.bar_chart?.earn?.map((y) => y?.y),
           };
 
           const total = updated?.y?.reduce((acc, val) => acc + val);

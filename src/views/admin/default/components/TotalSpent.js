@@ -1,7 +1,6 @@
 // Chakra imports
 import {
   Box,
-  Button,
   Flex,
   Icon,
   Select,
@@ -15,9 +14,7 @@ import Card from "components/card/Card.js";
 import LineChart from "components/charts/LineChart";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { IoCheckmarkCircle } from "react-icons/io5";
-import { MdBarChart, MdOutlineCalendarToday } from "react-icons/md";
 // Assets
-import { RiArrowUpSFill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 // import {
 //   lineChartDataTotalSpent,
@@ -27,11 +24,10 @@ import { useDispatch, useSelector } from "react-redux";
 export default function TotalSpent() {
   // Chakra Color Mode
 
-  const textColor = useColorModeValue("secondaryGray.900", "white");
   const textColorSecondary = useColorModeValue("secondaryGray.600", "white");
   const boxBg = useColorModeValue("secondaryGray.300", "whiteAlpha.100");
   const iconColor = useColorModeValue("brand.500", "white");
-  const bgButton = useColorModeValue("secondaryGray.300", "whiteAlpha.100");
+  const textColor = useColorModeValue("secondaryGray.900", "white");
   const bgHover = useColorModeValue(
     { bg: "secondaryGray.400" },
     { bg: "whiteAlpha.50" }
@@ -62,7 +58,6 @@ export default function TotalSpent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [duration, type]);
 
-  console.log("dashboardSpentChartData", dashboardSpentChartData);
   const totalSpent = useMemo(() => {
     return [
       {
@@ -165,11 +160,14 @@ export default function TotalSpent() {
         mb="8px"
       >
         <Text color={textColor} fontSize="md" fontWeight="600" mt="4px">
-          Total Spent
+          Total Revenue
         </Text>
         <Select
+          _focus={bgFocus}
+          _hover={bgHover}
+          color={iconColor}
           fontSize="sm"
-          variant="subtle"
+          // variant="subtle"
           width="unset"
           fontWeight="700"
           onChange={(e) => {
@@ -236,12 +234,12 @@ export default function TotalSpent() {
             >
               Total Billed
             </Text>
-            <Flex align="center">
+            {/* <Flex align="center">
               <Icon as={RiArrowUpSFill} color="green.500" me="2px" mt="2px" />
               <Text color="green.500" fontSize="sm" fontWeight="700">
                 +2.45%
               </Text>
-            </Flex>
+            </Flex> */}
           </Flex>
 
           <Flex align="center">

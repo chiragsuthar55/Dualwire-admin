@@ -138,7 +138,7 @@ const WeeklyRevenue = memo(() => {
       },
       plotOptions: {
         bar: {
-          borderRadius: 10,
+          borderRadius: 5,
           columnWidth: "20px",
         },
       },
@@ -164,15 +164,18 @@ const WeeklyRevenue = memo(() => {
         <Text
           me="auto"
           color={textColor}
-          fontSize="xl"
+          fontSize="md"
           fontWeight="700"
           lineHeight="100%"
         >
           Number of Raffles Done
         </Text>
         <Select
+          _focus={bgFocus}
+          _hover={bgHover}
+          color={iconColor}
           fontSize="sm"
-          variant="subtle"
+          // variant="subtle"
           width="unset"
           fontWeight="700"
           onChange={(e) => {
