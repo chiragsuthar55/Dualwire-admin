@@ -7,8 +7,7 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-// Custom components
-import React, { useCallback } from "react";
+import { useState } from "react";
 
 export default function Default(props) {
   const {
@@ -22,15 +21,9 @@ export default function Default(props) {
     fontSize,
     ...rest
   } = props;
-  let [checked, setChecked] = React.useState(isChecked);
+  let [checked, setChecked] = useState(isChecked);
 
-  console.log("checked", checked);
   const textColorPrimary = useColorModeValue("secondaryGray.900", "white");
-  console.log("onChange", onChange);
-
-  const onChangeStatusOfPlan = useCallback((i) => {
-    console.log("i", i);
-  }, []);
 
   return (
     <Box w="100%" fontWeight="500" {...rest}>

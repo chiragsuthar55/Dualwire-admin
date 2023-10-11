@@ -1,4 +1,3 @@
-// Chakra imports
 import { Box } from "@chakra-ui/react";
 import { getPlans } from "Services/PlanService";
 import { useCallback, useEffect, useState } from "react";
@@ -20,7 +19,6 @@ export default function Plans() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Chakra Color Mode
   return (
     <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>
       <DevelopmentTable
@@ -69,15 +67,3 @@ const columnsDataDevelopment = [
     accessor: "action",
   },
 ];
-
-// const data = [
-//   {
-//     name: "Free",
-//     date: "12.Jan.2021",
-//     progress: 75.5,
-//     yearly: "Lifetime free",
-//     monthly: "Lifetime free",
-//     limits: "Up to 600 comments",
-//     is_active: true,
-//   },
-// ];

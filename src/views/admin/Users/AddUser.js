@@ -70,9 +70,8 @@ const AddUser = () => {
     async (values) => {
       let res;
       if (values?.id) {
-        res = await dispatch(updateUser(values));
+        res = await dispatch(updateUser(values, u_id));
       } else res = await dispatch(createUser(values)); // or create new plan with same api
-      console.log("res", res);
       if (res) {
         navigate("/users");
         dispatch(
@@ -87,7 +86,7 @@ const AddUser = () => {
         );
       }
     },
-    [dispatch, navigate]
+    [dispatch, navigate, u_id]
   );
 
   const {
@@ -105,8 +104,6 @@ const AddUser = () => {
     onSubmit: submitHandle,
   });
 
-  console.log("values", values);
-  console.log("errors", errors);
   return (
     <>
       <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>

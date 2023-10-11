@@ -213,7 +213,6 @@ export const getRafflesList =
               };
             }),
           };
-          console.log("updated", updated);
           dispatch(setRafflesList(updated));
           return true;
         } else {

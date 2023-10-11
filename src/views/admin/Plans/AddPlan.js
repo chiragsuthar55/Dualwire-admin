@@ -62,7 +62,6 @@ const AddPlan = () => {
         metadata: values?.metadata,
       };
       let res;
-      console.log("payload", payload);
       if (values?.id) {
         payload.plan_id = values?.id;
         await dispatch(updatePlan(payload));
@@ -98,7 +97,6 @@ const AddPlan = () => {
     [dispatch, setFieldValue, values?.id, values?.status]
   );
 
-  console.log("values", values);
   return (
     <>
       <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>
