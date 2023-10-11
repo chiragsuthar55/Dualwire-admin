@@ -67,12 +67,3 @@ const columnsDataDevelopment = [
     accessor: "action",
   },
 ];
-// const data = [
-//   {
-//     name: "Chirag",
-//     email: "chiragsuthar.codezee@gmail.com",
-//     joindate: "12.Jan.2021",
-//     plan: "free",
-//     is_active: true,
-//   },
-// ];

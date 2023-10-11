@@ -14,8 +14,6 @@ export const setLoginData = (user_data) => async (dispatch, getState) => {
 };
 export const setUserCookies =
   (user, remember) => async (dispatch, getState) => {
-    console.log("user", user);
-    console.log("remember", remember);
     const encryptData = CryptoJS.AES.encrypt(user, "UserSecrets").toString();
     if (remember) Cookies.set("user", encryptData);
   };

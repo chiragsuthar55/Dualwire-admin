@@ -1,7 +1,6 @@
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
-
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import { toast } from "react-toastify";
 
 export const renderMsg = (e) => {
   console.log("e", e);
@@ -47,95 +46,163 @@ export const getShortNumber = (number) => {
   else return number?.toString();
 };
 
-const onViewReportPdf = async (data) => {
-  // Define the table headers and data
-  const tableHeaders = [
-    {
-      text: "Name",
-      style: "header",
-      fillColor: "#f7d794",
-      fontSize: 12,
-    },
-    { text: "From", style: "header", fillColor: "#f7d794", fontSize: 12 },
-    { text: "To", style: "header", fillColor: "#f7d794", fontSize: 12 },
-    {
-      text: "Total Duration",
-      style: "header",
-      fillColor: "#f7d794",
-      fontSize: 12,
-    },
-    {
-      text: "Estimated Distance",
-      style: "header",
-      fillColor: "#f7d794",
-      fontSize: 12,
-    },
-    {
-      text: "Max Speed",
-      style: "header",
-      fillColor: "#f7d794",
-      fontSize: 12,
-    },
-    {
-      text: "Average Speed",
-      style: "header",
-      fillColor: "#f7d794",
-      fontSize: 12,
-    },
-  ];
+export const onViewReportPdf = async (data, module) => {
+  let tableColumn = [];
+  let tableData = [];
 
-  const tableData = data.map((item) => [
-    item.name,
-    item.from,
-    item.to,
-    item.totalDuration,
-    item.estimatedDistance,
-    item.maxSpeed,
-    item.avgSpeed,
-  ]);
-
-  // Define the PDF document definition
-  const docDefinition = {
-    content: [
-      { text: "Codezee Solutions Pvt Ltd.", style: "company" },
-      { text: "Report", style: "header" },
-      {
-        text: ["Tracker Id : 846456546874789", " Tracker Name : huehrheth"],
-      },
-      {
-        layout: {
-          hLineColor: function (i, node) {
-            return i === 0 || i === node.table.body.length ? "black" : "gray";
-          },
-          vLineColor: function (i, node) {
-            return i === 0 || i === node.table.widths.length ? "black" : "gray";
-          },
-        },
-        table: {
-          headerRows: 1,
-          widths: ["auto", "auto", "auto", "auto", "auto", "auto", "auto"],
-          body: [tableHeaders, ...tableData],
-        },
-      },
-    ],
-    styles: {
-      header: {
-        bold: true,
-        margin: [0, 0, 0, 8],
-        fontSize: 12,
-        alignment: "center",
-      },
-      body: {
-        fontSize: 5,
-      },
-      company: {
-        fontSize: 14,
-        alignment: "center",
-      },
-    },
+  let pdfConfig = {
+    orientation: "1",
+    unit: "pt",
+    pageSize: "a4",
   };
 
-  // Generate the PDF document and open in a new tab
-  const pdfDocGenerator = pdfMake.createPdf(docDefinition);
-  pdfDocGenerator?.open();
+  try {
+    if (module === "Users") {
+      tableColumn = [
+        { dataKey: "first_name", title: "First Name" },
+        { dataKey: "last_name", title: "Last Name" },
+        { dataKey: "email", title: "Email" },
+        { dataKey: "joined_date", title: "Joined Date" },
+        { dataKey: "plan", title: "Plan" },
+        { dataKey: "status", title: "Status" },
+      ];
+
+      tableData = data?.map((item, i) => [
+        item.first_name,
+        item.last_name,
+        item.email,
+        item.joined_date,
+        item.plan,
+        item.status ? "Active" : "InActive",
+      ]);
+    } else if (module === "Plans") {
+      tableColumn = [
+        { dataKey: "name", title: "Name" },
+        { dataKey: "description", title: "Description" },
+        { dataKey: "monthly", title: "Price Monthly" },
+        { dataKey: "yearly", title: "Price Yearly" },
+        { dataKey: "currency", title: "Currency" },
+        { dataKey: "status", title: "Status" },
+      ];
+
+      tableData = data?.map((item, i) => [
+        item.name,
+        item.description,
+        item.monthly,
+        item.yearly,
+        item.currency,
+        item.status ? "Active" : "InActive",
+      ]);
+    } else if (module === "Activity") {
+      tableColumn = [
+        { dataKey: "username", title: "UserName" },
+        { dataKey: "logon_time", title: "Login Time" },
+        { dataKey: "logout_time", title: "Logout Time" },
+        { dataKey: "ip_address", title: "Ip Address" },
+        { dataKey: "country_code", title: "Country" },
+        { dataKey: "average_time", title: "Average Time Spended" },
+        { dataKey: "status", title: "Status" },
+      ];
+
+      tableData = data?.map((item, i) => [
+        item.username,
+        item.logon_time,
+        item.logout_time,
+        item.ip_address,
+        item.country_code,
+        item.average_time,
+        item.status,
+      ]);
+    } else if (module === "Subscriptions") {
+      tableColumn = [
+        { dataKey: "recipient", title: "Recipient" },
+        { dataKey: "plan_name", title: "Plan" },
+        { dataKey: "amount", title: "Amount" },
+        { dataKey: "customer_email", title: "Customer Email" },
+        { dataKey: "stripe_subscription_id", title: "Subscription Id" },
+        { dataKey: "plan_interval", title: "Plan Interval" },
+        { dataKey: "created", title: "Date & Time" },
+        { dataKey: "plan_period_start", title: "Plan Period Start" },
+        { dataKey: "plan_period_end", title: "Plan Period End" },
+        { dataKey: "status", title: "Status" },
+      ];
+
+      tableData = data?.map((item, i) => [
+        `${item?.first_name} ${item?.last_name}`,
+        item?.plan_name,
+        item?.amount,
+        item?.customer_email,
+        item?.stripe_subscription_id,
+        item?.plan_interval,
+        item?.created,
+        item?.plan_period_start,
+        item?.plan_period_end,
+        item?.status?.toUpperCase(),
+      ]);
+      pdfConfig.orientation = "landscape";
+    } else if (module === "Raffles") {
+      tableColumn = [
+        { dataKey: "title", title: "Title" },
+        { dataKey: "channelTitle", title: "Channel Title" },
+        { dataKey: "comments", title: "Comments" },
+        { dataKey: "winner", title: "Winner" },
+      ];
+
+      tableData = data?.map((item, i) => [
+        item.title,
+        item.channelTitle,
+        item.comments,
+        item.winner,
+      ]);
+    }
+
+    // to dynamic page width =  landscape create common settings
+    const doc = new jsPDF(
+      pdfConfig?.orientation,
+      pdfConfig?.unit,
+      pdfConfig?.pageSize
+    );
+    doc.setFontSize(15);
+    doc.setTextColor(45);
+    const pageWidth = doc.internal.pageSize.width;
+    const pageHeight = doc.internal.pageSize.height;
+    const topHight = 25;
+    doc.text("Dual Wire", pageWidth / 2, topHight, { align: "center" });
+    doc.line(35, topHight + 10, pageWidth - 35, topHight + 10);
+    doc.setFontSize(10);
+    doc.setTextColor(40);
+
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableData,
+    });
+
+    const pageCount = doc.internal.getNumberOfPages();
+    for (var i = 1; i < pageCount + 1; i++) {
+      let horizontalPos = pageWidth - 35;
+      let verticalPos = pageHeight - 10;
+      doc.line(30, pageHeight - 30, pageWidth - 35, pageHeight - 30);
+      doc.setPage(i);
+      doc.text("Page : " + String(i), 40, verticalPos, {
+        align: "left",
+      });
+      doc.text(
+        "Print Date : " + new Date(Date.now()).toLocaleString().split(",")[0],
+        horizontalPos,
+        verticalPos,
+        {
+          align: "right",
+        }
+      );
+    }
+
+    doc.setProperties({
+      title: "Dual Wire",
+    });
+
+    window.open(doc.output("bloburl"));
+  } catch (e) {
+    console.log("e", e);
+    toast.error("Unable to generate pdf !");
+  }
 };

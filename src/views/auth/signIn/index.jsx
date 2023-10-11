@@ -84,8 +84,9 @@ function SignIn() {
 
   const submitHandle = useCallback(
     async (values) => {
-      console.log("values", values);
-      const res = await dispatch(login(values));
+      const payload = { ...values };
+      payload.isAdmin = true;
+      const res = await dispatch(login(payload));
       if (res) {
         navigate("/");
       }
@@ -93,22 +94,13 @@ function SignIn() {
     [dispatch, navigate]
   );
 
-  const {
-    handleBlur,
-    handleChange,
-    errors,
-    values,
-    touched,
-    handleSubmit,
-    resetForm,
-  } = useFormik({
-    enableReinitialize: true,
-    initialValues: loginValues,
-    validationSchema: loginSchema,
-    onSubmit: submitHandle,
-  });
-
-  console.log("values", values);
+  const { handleBlur, handleChange, errors, values, touched, handleSubmit } =
+    useFormik({
+      enableReinitialize: true,
+      initialValues: loginValues,
+      validationSchema: loginSchema,
+      onSubmit: submitHandle,
+    });
 
   const handleClick = () => setShow(!show);
 

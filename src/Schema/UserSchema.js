@@ -5,8 +5,8 @@ export const userSchema = Yup.object().shape({
   last_name: Yup.string().required("Last name is required"),
   email: Yup.string().email("Invalid email").required("Email is required"),
   status: Yup.boolean(),
-  language: Yup.string().required("Language is required"),
+  language: Yup.string().nullable(""),
   password: Yup.string()
-    .required("Password is required")
+    .nullable()
     .min(8, "Password must be at least 8 characters long"),
 });

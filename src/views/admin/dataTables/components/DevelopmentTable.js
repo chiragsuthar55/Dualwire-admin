@@ -4,7 +4,7 @@ import {
   Button,
   Flex,
   Icon,
-  Select,
+  // Select,
   Skeleton,
   Switch,
   Table,
@@ -26,9 +26,7 @@ import {
   MdAddTask,
   MdCancel,
   MdCheckCircle,
-  MdImportExport,
   MdOutlineError,
-  MdPictureAsPdf,
 } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
@@ -41,8 +39,8 @@ import { setPlans } from "Store/Reducers/PlanSlice";
 import { useDispatch } from "react-redux";
 import { updateStatusOfPlan } from "Services/PlanService";
 import { chartColor } from "views/admin/default/components/PieCard";
-import { IoSend } from "react-icons/io5";
-import { FaFileExcel, FaFilePdf, FaRegFilePdf } from "react-icons/fa";
+import { FaFilePdf } from "react-icons/fa";
+import { onViewReportPdf } from "Helper/Common";
 
 export default function DevelopmentTable({
   loading,
@@ -195,19 +193,20 @@ export default function DevelopmentTable({
                 <Button
                   paddingLeft={"5px"}
                   paddingRight={"5px"}
-                  onClick={() => navigate(path || "/")}
+                  onClick={() => onViewReportPdf(data, name)}
                   borderRadius={"10px"}
+                  // marginRight={"5px"}
                 >
                   <Icon as={FaFilePdf} color={iconColor} w="20px" h="20px" />
                 </Button>
-                <Button
+                {/* <Button
                   paddingLeft={"5px"}
                   paddingRight={"5px"}
-                  onClick={() => navigate(path || "/")}
+                  // onClick={() => onViewReportExcel(path || "/")}
                   borderRadius={"10px"}
                 >
                   <Icon as={FaFileExcel} color={iconColor} w="20px" h="20px" />
-                </Button>
+                </Button> */}
               </Box>
             </Flex>
           </Flex>
@@ -315,7 +314,6 @@ export default function DevelopmentTable({
                       cursor={
                         name === "Plans" || name === "Users" ? "pointer" : false
                       }
-                      onClick={() => onEdit(tableData?.[row?.id]?.id)}
                     >
                       {row.cells.map((cell, index) => {
                         let data = "";
@@ -363,13 +361,17 @@ export default function DevelopmentTable({
                               // }
                               fontSize="sm"
                               fontWeight="700"
+                              onClick={() => onEdit(tableData?.[row?.id]?.id)}
                             >
                               {cell.value}
                             </Text>
                           );
                         } else if (cell.column.Header === "STATUS") {
                           data = (
-                            <Flex align="center">
+                            <Flex
+                              align="center"
+                              onClick={() => onEdit(tableData?.[row?.id]?.id)}
+                            >
                               {typeof cell.value === "number" ? (
                                 <>
                                   <Icon
@@ -432,13 +434,14 @@ export default function DevelopmentTable({
                               variant="main"
                               colorScheme="brandScheme"
                               size="md"
-                              onChange={() =>
+                              onChange={(e) => {
+                                e.preventDefault();
                                 onChangeStatusOfPlan(
                                   row?.id,
                                   !cell.value,
                                   row.original.id
-                                )
-                              }
+                                );
+                              }}
                             />
                           );
                         } else if (cell.column.Header === "ACTION") {

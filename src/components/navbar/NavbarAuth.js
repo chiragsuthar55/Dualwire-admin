@@ -60,7 +60,6 @@ export default function AuthNavbar(props) {
     let foundRoute = routes.filter(function (route) {
       return route.items && route.name === routeName;
     });
-    console.log(foundRoute);
     return foundRoute[0].items;
   }
   function getLinksCollapse(routeName) {
@@ -90,7 +89,6 @@ export default function AuthNavbar(props) {
   let colorButton = "brand.500";
   let navbarPosition = "absolute";
 
-  console.log("PUBLIC_URL", process.env.PUBLIC_URL);
   let brand = (
     <Link
       href={`${process.env.PUBLIC_URL}`}

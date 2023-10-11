@@ -12,6 +12,7 @@ import {
   FormControl,
   FormLabel,
   Heading,
+  Icon,
   Input,
   Spinner,
   Text,
@@ -28,6 +29,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import { forgetPasswordSchema } from "Schema/AuthSchema";
 import { forgotPassword } from "Services/AuthServices";
+import { MdChevronLeft } from "react-icons/md";
 
 function ForgotPassword() {
   const navigate = useNavigate();
@@ -167,7 +169,7 @@ function ForgotPassword() {
               marginRight={"20px"}
               display={"flex"}
               alignItems={"center"}
-              justifyContent={"center"}
+              justifyContent={"space-between"}
             >
               <NavLink to="/auth/sign-in">
                 <Text
@@ -178,6 +180,24 @@ function ForgotPassword() {
                 >
                   Remember your password? Login
                 </Text>
+              </NavLink>
+              <NavLink to={-1}>
+                <Flex>
+                  <Icon
+                    as={MdChevronLeft}
+                    width="20px"
+                    height="20px"
+                    color={textColorBrand}
+                  />
+                  <Text
+                    mb={"24px"}
+                    color={textColorBrand}
+                    fontSize="sm"
+                    fontWeight="500"
+                  >
+                    Back
+                  </Text>
+                </Flex>
               </NavLink>
             </Box>
           </FormControl>

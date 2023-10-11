@@ -71,7 +71,7 @@ Then run this command to start your local server
 npm start
 ```
 
-Then run this command to create static build
+Then run this command to create build directory with a production
 
 ```bash
 npm run build
