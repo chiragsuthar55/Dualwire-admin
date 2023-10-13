@@ -22,6 +22,9 @@ export default function TablePagination({
   gotoPage,
   selectedItemsLength,
   renderProps,
+  setPerPage,
+  perPage,
+  name,
 }) {
   // const [perPageItem, setPerPageItem] = useState(10);
 
@@ -62,25 +65,33 @@ export default function TablePagination({
         alignItems={"center"}
       >
         <Box alignItems={"center"} display="flex">
-          {/* <FormControl color={iconColor}>
-            <Select
-              color={iconColor}
-              id="user_type"
-              w="unset"
-              display="flex"
-              alignItems="center"
-              value={perPageItem || ""}
-              onChange={(e) => {
-                handleChangePageSize(Number(e?.target.value));
-              }}
-            >
-              <option value={10}>10</option>
-              <option value={25}>25</option>
-              <option value={50}>50</option>
-              <option value={"0"}>All</option>
-            </Select>
-          </FormControl> */}
+          {name !== "Plans" && (
+            <FormControl color={iconColor}>
+              <Select
+                color={iconColor}
+                id="user_type"
+                w="unset"
+                display="flex"
+                alignItems="center"
+                // value={perPageItem || ""}
+                // onChange={(e) => {
+                //   handleChangePageSize(Number(e?.target.value));
+                // }}
+                value={perPage || ""}
+                onChange={(e) => {
+                  setPerPage(Number(e?.target.value));
+                  setPageSize(Number(e?.target.value));
+                }}
+              >
+                <option value={10}>10</option>
+                <option value={25}>25</option>
+                <option value={50}>50</option>
+                <option value={1000}>1000</option>
+              </Select>
+            </FormControl>
+          )}
         </Box>
+
         {renderProps}
         <Flex alignItems={"center"}>
           <Box marginRight={"10px"}>

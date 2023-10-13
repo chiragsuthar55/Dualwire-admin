@@ -85,7 +85,7 @@ function SignIn() {
   const submitHandle = useCallback(
     async (values) => {
       const payload = { ...values };
-      payload.isAdmin = true;
+      payload.is_admin = 1;
       const res = await dispatch(login(payload));
       if (res) {
         navigate("/");

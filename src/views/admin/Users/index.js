@@ -8,12 +8,19 @@ const Users = () => {
   const dispatch = useDispatch();
 
   const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [search, setSearch] = useState("");
   const { usersLoading, usersList } = useSelector(({ users }) => users);
 
   useEffect(() => {
-    dispatch(getUsersList(page + 1));
+    const getData = setTimeout(() => {
+      dispatch(getUsersList(page + 1, pageSize, startDate, endDate, search));
+    }, 500);
+    return () => clearTimeout(getData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
+  }, [page, search, pageSize, startDate, endDate]);
 
   return (
     <>
@@ -29,6 +36,14 @@ const Users = () => {
           pageLength={usersList?.per_page}
           gotoPage={setPage}
           pageIndex={usersList?.current_page - 1}
+          perPage={pageSize}
+          setPerPage={setPageSize}
+          startDate={startDate}
+          setStartDate={setStartDate}
+          endDate={endDate}
+          setEndDate={setEndDate}
+          search={search}
+          setSearch={setSearch}
         />
       </Box>
     </>

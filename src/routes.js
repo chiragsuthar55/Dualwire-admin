@@ -31,7 +31,7 @@ import { AiFillSlackCircle } from "react-icons/ai";
 
 const routes = [
   {
-    name: "Main Dashboard",
+    name: "Dashboard",
     layout: "/admin",
     path: "/",
     icon: <Icon as={MdHome} width="20px" height="20px" color="inherit" />,
