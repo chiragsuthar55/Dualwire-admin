@@ -67,7 +67,7 @@ export const getDashboardChartData =
             y: data?.bar_chart?.earn?.map((y) => y?.y),
           };
 
-          const total = updated?.y?.reduce((acc, val) => acc + val);
+          const total = updated?.y?.reduce((acc, val) => acc + val, 0) || [];
           updated.totalBilled = total ? getShortNumber(total) : total;
           dispatch(setDashboardSpentChartData(updated));
         }

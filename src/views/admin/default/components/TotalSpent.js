@@ -52,6 +52,7 @@ export default function TotalSpent() {
     },
     [dispatch]
   );
+  console.log("loading", loading);
   useEffect(() => {
     setLoading(true);
     loadData(duration, type);
@@ -222,7 +223,7 @@ export default function TotalSpent() {
             fontWeight="700"
             lineHeight="100%"
           >
-            ${dashboardSpentChartData?.totalBilled}
+            ${dashboardSpentChartData?.totalBilled || 0}
           </Text>
           <Flex align="center" mb="20px">
             <Text
@@ -232,7 +233,9 @@ export default function TotalSpent() {
               mt="4px"
               me="12px"
             >
-              Total Billed
+              {dashboardSpentChartData?.bar_chart?.earn?.length === 0
+                ? "No data"
+                : "Total Billed"}
             </Text>
             {/* <Flex align="center">
               <Icon as={RiArrowUpSFill} color="green.500" me="2px" mt="2px" />

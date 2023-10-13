@@ -4,7 +4,10 @@ import {
   Button,
   Flex,
   Icon,
-  // Select,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Select,
   Skeleton,
   Switch,
   Table,
@@ -26,6 +29,8 @@ import {
   MdAddTask,
   MdCancel,
   MdCheckCircle,
+  MdChevronLeft,
+  MdChevronRight,
   MdOutlineError,
 } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -41,6 +46,8 @@ import { updateStatusOfPlan } from "Services/PlanService";
 import { chartColor } from "views/admin/default/components/PieCard";
 import { FaFilePdf } from "react-icons/fa";
 import { onViewReportPdf } from "Helper/Common";
+import { AiOutlineSend } from "react-icons/ai";
+import Calendar from "react-calendar";
 
 export default function DevelopmentTable({
   loading,
@@ -53,6 +60,16 @@ export default function DevelopmentTable({
   pageIndex,
   pageLength,
   gotoPage,
+  perPage,
+  setPerPage,
+  startDate,
+  setStartDate,
+  endDate,
+  setEndDate,
+  search,
+  setSearch,
+  setSort,
+  sort,
 }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -163,18 +180,7 @@ export default function DevelopmentTable({
             >
               {name}
             </Text>
-
             <Flex>
-              {editable && (
-                <Button
-                  onClick={() => navigate(path || "/")}
-                  me={"10px"}
-                  borderRadius={"10px"}
-                >
-                  <Icon as={MdAddTask} color={iconColor} w="24px" h="24px" />
-                  &nbsp; Add New {name}
-                </Button>
-              )}
               {/* <Select
                 _focus={bgFocus}
                 _hover={bgHover}
@@ -188,26 +194,76 @@ export default function DevelopmentTable({
               >
                 <option value={1}>Active</option>
                 <option value={0}>InActive</option>
-              </Select> */}
-              <Box>
+              </Select> */}{" "}
+              {name === "Raffles" && (
+                <Select
+                  _focus={bgFocus}
+                  _hover={bgHover}
+                  color={iconColor}
+                  id="user_type"
+                  w="unset"
+                  display="flex"
+                  alignItems="center"
+                  me={"10px"}
+                  value={sort}
+                  onChange={(e) => setSort(e.target.value)}
+                >
+                  <option value={1}>Last 3 Months</option>
+                  <option value={2}>Last 6 Months</option>
+                  <option value={3}>Last 12 Months</option>
+                  <option value={""}>All</option>
+                </Select>
+              )}
+              {name !== "Raffles" && name !== "Plans" && (
+                <Input
+                  _focus={bgFocus}
+                  isRequired={true}
+                  variant="auth"
+                  fontSize="sm"
+                  w={"150px"}
+                  me={{ base: "5px", md: "5px" }}
+                  ms={{ base: "0px", md: "0px" }}
+                  type="text"
+                  placeholder="Search.."
+                  fontWeight="500"
+                  size="md"
+                  value={search || ""}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              )}
+              {/* <Input
+                _focus={bgFocus}
+                isRequired={true}
+                variant="auth"
+                fontSize="sm"
+                me={{ base: "5px", md: "5px" }}
+                ms={{ base: "0px", md: "0px" }}
+                type="date"
+                placeholder="25/2/23"
+                fontWeight="500"
+                size="lg"
+                // value={values?.first_name || ""}
+                // onChange={handleChange}
+              /> */}
+              <Button
+                paddingLeft={"5px"}
+                paddingRight={"5px"}
+                onClick={() => onViewReportPdf(data, name)}
+                borderRadius={"10px"}
+                me={"5px"}
+              >
+                <Icon as={FaFilePdf} color={iconColor} w="20px" h="20px" />
+              </Button>
+              {editable && (
                 <Button
-                  paddingLeft={"5px"}
-                  paddingRight={"5px"}
-                  onClick={() => onViewReportPdf(data, name)}
+                  onClick={() => navigate(path || "/")}
                   borderRadius={"10px"}
-                  // marginRight={"5px"}
+                  fontSize={{ sm: "12px", lg: "14px" }}
                 >
-                  <Icon as={FaFilePdf} color={iconColor} w="20px" h="20px" />
+                  <Icon as={MdAddTask} color={iconColor} w="20px" h="20px" />
+                  &nbsp; Add {name}
                 </Button>
-                {/* <Button
-                  paddingLeft={"5px"}
-                  paddingRight={"5px"}
-                  // onClick={() => onViewReportExcel(path || "/")}
-                  borderRadius={"10px"}
-                >
-                  <Icon as={FaFileExcel} color={iconColor} w="20px" h="20px" />
-                </Button> */}
-              </Box>
+              )}
             </Flex>
           </Flex>
           <Table
@@ -507,6 +563,9 @@ export default function DevelopmentTable({
         pageLength={pageLength}
         dataLength={dataLength}
         selectedItemsLength={selectedFlatRows?.length}
+        setPerPage={setPerPage}
+        perPage={perPage}
+        name={name}
       />
     </Card>
   );

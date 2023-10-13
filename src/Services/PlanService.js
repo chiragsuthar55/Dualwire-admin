@@ -126,6 +126,7 @@ export const updatePlan = (payload) => async (dispatch) => {
  */
 export const createPlan = (payload) => async (dispatch) => {
   try {
+    console.log("payload", payload);
     if (payload) {
       dispatch(setPlanLoading(true));
       const response = await axios.post(`/admin/plan`, payload);
@@ -151,13 +152,13 @@ export const createPlan = (payload) => async (dispatch) => {
  * @desc  Get Subscriptions List
  */
 export const getSubscriptionsList =
-  (page = 1) =>
+  (page = 1, per_page = 50, from_date = "", to_date = "", search = "") =>
   async (dispatch) => {
     try {
       if (page) {
         dispatch(setPlanLoading(true));
         const response = await axios.get(
-          `/admin/get_subscription?page=${page}`
+          `/admin/get_subscription?page=${page}&per_page=${per_page}&from_date=${from_date}&to_date=${to_date}&search=${search}`
         );
 
         const { success, data, message } = response.data;
@@ -195,25 +196,28 @@ export const getSubscriptionsList =
  * @desc  Get Raffles List
  */
 export const getRafflesList =
-  (page = 1) =>
+  (page = 1, per_page = 10, sort = 1) =>
   async (dispatch) => {
     try {
       if (page) {
         dispatch(setPlanLoading(true));
-        const response = await axios.get(`/admin/get_raffles?page=${page}`);
+
+        const response = await axios.get(
+          `/admin/get_raffles?page=${page}&sort=${sort}&per_page=${per_page}`
+        );
 
         const { success, data, message } = response.data;
 
         if (success) {
-          const updated = {
-            ...data,
-            records: data?.records?.map((x) => {
-              return {
-                ...x,
-              };
-            }),
-          };
-          dispatch(setRafflesList(updated));
+          // const updated = {
+          //   ...data,
+          //   records: data?.records?.map((x) => {
+          //     return {
+          //       ...x,
+          //     };
+          //   }),
+          // };
+          dispatch(setRafflesList(data));
           return true;
         } else {
           toast.error(message);

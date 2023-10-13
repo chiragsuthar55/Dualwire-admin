@@ -69,11 +69,7 @@ export default function CustomMenu({ onDelete, onEdit, data, onView, module }) {
         w="37px"
         // h="37px"
         lineHeight="100%"
-        onClick={(e) => {
-          console.log("e", e);
-          e.preventDefault();
-          onOpen1();
-        }}
+        onClick={onOpen1}
         borderRadius="10px"
       >
         <Icon as={MdOutlineMoreHoriz} color={iconColor} w="24px" h="24px" />

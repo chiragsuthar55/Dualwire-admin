@@ -4,16 +4,26 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { getSubscriptionsList } from "Services/PlanService";
 
-const Billed = () => {
+const Subscriptions = () => {
   const dispatch = useDispatch();
 
   const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [search, setSearch] = useState("");
+
   const { planLoading, subscriptionsList } = useSelector(({ plan }) => plan);
 
   useEffect(() => {
-    dispatch(getSubscriptionsList(page + 1));
+    const getData = setTimeout(() => {
+      dispatch(
+        getSubscriptionsList(page + 1, pageSize, startDate, endDate, search)
+      );
+    }, 500);
+    return () => clearTimeout(getData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
+  }, [page, search, pageSize, startDate, endDate]);
 
   return (
     <>
@@ -29,13 +39,21 @@ const Billed = () => {
           gotoPage={setPage}
           pageLength={subscriptionsList?.per_page}
           pageIndex={subscriptionsList?.current_page - 1}
+          perPage={pageSize}
+          setPerPage={setPageSize}
+          startDate={startDate}
+          setStartDate={setStartDate}
+          endDate={endDate}
+          setEndDate={setEndDate}
+          search={search}
+          setSearch={setSearch}
         />
       </Box>
     </>
   );
 };
 
-export default Billed;
+export default Subscriptions;
 
 const columnsDataDevelopment = [
   {

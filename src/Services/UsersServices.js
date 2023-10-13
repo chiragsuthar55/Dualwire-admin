@@ -11,11 +11,13 @@ import { toast } from "react-toastify";
  * @desc  Get Users List
  */
 export const getUsersList =
-  (page = 1) =>
+  (page = 1, per_page = 50, from_date = "", to_date = "", search = "") =>
   async (dispatch) => {
     try {
       dispatch(setUsersLoading(true));
-      const response = await axios.get(`/admin/users?page=${page}`);
+      const response = await axios.get(
+        `/admin/users?page=${page}&per_page=${per_page}&from_date=${from_date}&to_date=${to_date}&search=${search}`
+      );
 
       const { success, data, message } = response.data;
       if (success) {
@@ -124,11 +126,13 @@ export const createUser = (payload) => async (dispatch) => {
  * @desc  Get User Activity List
  */
 export const getUserActivityList =
-  (page = 1) =>
+  (page = 1, per_page = 50, from_date = "", to_date = "", search = "") =>
   async (dispatch) => {
     try {
       dispatch(setUsersLoading(true));
-      const response = await axios.get(`/admin/activity?page=${page}`);
+      const response = await axios.get(
+        `/admin/activity?page=${page}&per_page=${per_page}&from_date=${from_date}&to_date=${to_date}&search=${search}`
+      );
 
       const { success, message, data } = response.data;
       if (success) {

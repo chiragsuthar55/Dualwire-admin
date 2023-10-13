@@ -10,20 +10,15 @@ import {
   Spinner,
   Switch,
   Text,
-  // Icon,
-  // Tooltip,
   useColorModeValue,
 } from "@chakra-ui/react";
 import { planSchema } from "Schema/PlanSchema";
-import { createPlan } from "Services/PlanService";
+import { createPlan, updatePlan, getPlans } from "Services/PlanService";
 import { updateStatusOfPlan } from "Services/PlanService";
-import { updatePlan } from "Services/PlanService";
-import { getPlans } from "Services/PlanService";
 import { setSinglePlan } from "Store/Reducers/PlanSlice";
 import Card from "components/card/Card";
 import { useFormik } from "formik";
 import { useCallback, useEffect } from "react";
-// import { MdInfoOutline } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -56,9 +51,16 @@ const AddPlan = () => {
       const payload = {
         name: values?.name,
         description: values?.description,
-        prices: values?.id
-          ? values?.prices?.map((x) => ({ ...x, price_id: x?.id }))
-          : values?.prices,
+        prices: [
+          {
+            price: Number(values?.monthly),
+            duration: "month",
+          },
+          {
+            price: Number(values?.yearly),
+            duration: "year",
+          },
+        ],
         metadata: values?.metadata,
       };
       let res;
@@ -66,7 +68,6 @@ const AddPlan = () => {
         payload.plan_id = values?.id;
         await dispatch(updatePlan(payload));
       } else res = await dispatch(createPlan(payload)); // or create new plan with same api
-      console.log("res", res);
     },
     [dispatch]
   );
@@ -97,6 +98,8 @@ const AddPlan = () => {
     [dispatch, setFieldValue, values?.id, values?.status]
   );
 
+  console.log("values", values);
+  console.log("errors", errors);
   return (
     <>
       <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>
@@ -116,7 +119,7 @@ const AddPlan = () => {
               {plan_id ? "Edit" : "Add New"} Plan
             </Text>
             <Switch
-              isChecked={values?.status === 1}
+              isChecked={values?.status === 1 || false}
               variant="main"
               colorScheme="brandScheme"
               size="md"
@@ -228,29 +231,13 @@ const AddPlan = () => {
                   fontWeight="500"
                   size="lg"
                   name="monthly"
-                  value={
-                    values?.prices?.find((x) => x.duration === "month")
-                      ?.price || 0
-                  }
+                  value={values?.monthly}
                   onChange={(e) => {
-                    const i = values?.prices?.findIndex(
-                      (x) => x?.duration === "month"
-                    );
-                    let list = [
-                      ...JSON.parse(JSON.stringify(values?.prices || {})),
-                    ];
-                    if (i >= 0) {
-                      const val = Number(e.target.value) || 0;
-                      list[i].price = val;
-                      setValues((prev) => ({
-                        ...prev,
-                        prices: list,
-                      }));
-                      setFieldValue("monthly", val);
-                    }
+                    setFieldValue("monthly", e.target.value);
                   }}
                   onBlur={handleBlur}
-                />{" "}
+                  disabled={!!values?.id}
+                />
                 {touched?.monthly && errors?.monthly && (
                   <Text
                     className="form-error"
@@ -271,7 +258,7 @@ const AddPlan = () => {
                   mb="8px"
                 >
                   Yearly Price<Text color={brandStars}>*</Text> &nbsp;
-                  &nbsp;(Price in {singlePlan?.currency})
+                  &nbsp;(Price in USD)
                 </FormLabel>
                 <Input
                   _focus={bgFocus}
@@ -284,28 +271,12 @@ const AddPlan = () => {
                   fontWeight="500"
                   size="lg"
                   name="yearly"
-                  value={
-                    values?.prices?.find((x) => x.duration === "year")?.price ||
-                    0
-                  }
+                  value={values?.yearly}
                   onChange={(e) => {
-                    const i = values?.prices?.findIndex(
-                      (x) => x?.duration === "year"
-                    );
-                    let list = [
-                      ...JSON.parse(JSON.stringify(values?.prices || {})),
-                    ];
-                    if (i >= 0) {
-                      const val = Number(e.target.value) || 0;
-                      list[i].price = val;
-                      setValues((prev) => ({
-                        ...prev,
-                        prices: list,
-                      }));
-                      setFieldValue("yearly", val);
-                    }
+                    setFieldValue("yearly", e.target.value);
                   }}
                   onBlur={handleBlur}
+                  disabled={!!values?.id}
                 />
                 {touched?.yearly && errors?.yearly && (
                   <Text
@@ -360,9 +331,9 @@ const AddPlan = () => {
                     }
                   />
                   <Text
-                    fontWeight="bold"
                     color={textColor}
-                    fontSize="md"
+                    fontSize="sm"
+                    fontWeight="500"
                     textAlign="start"
                   >
                     Instagram Giveaway
@@ -388,9 +359,9 @@ const AddPlan = () => {
                     }
                   />
                   <Text
-                    fontWeight="bold"
+                    fontWeight="500"
                     color={textColor}
-                    fontSize="md"
+                    fontSize="sm"
                     textAlign="start"
                   >
                     Facebook Giveaway
@@ -414,9 +385,9 @@ const AddPlan = () => {
                     isChecked={values?.metadata?.["Twitter Giveaways"] || false}
                   />
                   <Text
-                    fontWeight="bold"
+                    fontWeight="500"
                     color={textColor}
-                    fontSize="md"
+                    fontSize="sm"
                     textAlign="start"
                   >
                     Twitter Giveaway
@@ -440,9 +411,9 @@ const AddPlan = () => {
                     isChecked={values?.metadata?.["List Giveaway"] || false}
                   />
                   <Text
-                    fontWeight="bold"
+                    fontWeight="500"
                     color={textColor}
-                    fontSize="md"
+                    fontSize="sm"
                     textAlign="start"
                   >
                     List Giveaway
@@ -466,9 +437,9 @@ const AddPlan = () => {
                     colorScheme="brandScheme"
                   />
                   <Text
-                    fontWeight="bold"
+                    fontWeight="500"
                     color={textColor}
-                    fontSize="md"
+                    fontSize="sm"
                     textAlign="start"
                   >
                     Youtube Giveaway
@@ -492,9 +463,9 @@ const AddPlan = () => {
                     colorScheme="brandScheme"
                   />
                   <Text
-                    fontWeight="bold"
+                    fontWeight="500"
                     color={textColor}
-                    fontSize="md"
+                    fontSize="sm"
                     textAlign="start"
                   >
                     Tiktok Giveaway
@@ -520,9 +491,9 @@ const AddPlan = () => {
                     colorScheme="brandScheme"
                   />
                   <Text
-                    fontWeight="bold"
+                    fontWeight="500"
                     color={textColor}
-                    fontSize="md"
+                    fontSize="sm"
                     textAlign="start"
                   >
                     Multi-Network Giveaways
@@ -531,7 +502,7 @@ const AddPlan = () => {
               </Box>
             </Grid>
           </Card>
-          {/* <Card>
+          <Card>
             <Grid
               mb="20px"
               gridTemplateColumns={{
@@ -544,79 +515,62 @@ const AddPlan = () => {
               <Box>
                 <FormLabel
                   ms="4px"
-                  fontSize="sm"
-                  fontWeight="500"
+                  fontSize="20px"
+                  fontWeight="700"
                   color={textColor}
                   display="flex"
                 >
-                  Limits<Text color={brandStars}>*</Text>
+                  SelectPRO features
                 </FormLabel>
                 <Box px="11px">
                   <Flex mb="10px">
-                    <Checkbox me="16px" colorScheme="brandScheme" />
+                    <Checkbox
+                      me="16px"
+                      colorScheme="brandScheme"
+                      onChange={(e) =>
+                        setValues((prev) => ({
+                          ...prev,
+                          metadata: {
+                            ...prev.metadata,
+                            "Bonus entries": e.target.checked,
+                          },
+                        }))
+                      }
+                      onBlur={handleBlur}
+                      isChecked={values?.metadata?.["Bonus entries"] || false}
+                    />
                     <Text
-                      fontWeight="bold"
+                      fontWeight="500"
                       color={textColor}
-                      fontSize="md"
+                      fontSize="sm"
                       textAlign="start"
                     >
-                      Landing Page Design
+                      Bonus entries
                     </Text>
                   </Flex>
                   <Flex mb="10px">
                     <Checkbox
                       me="16px"
-                      defaultChecked
                       colorScheme="brandScheme"
+                      onChange={(e) =>
+                        setValues((prev) => ({
+                          ...prev,
+                          metadata: {
+                            ...prev.metadata,
+                            "Block accounts": e.target.checked,
+                          },
+                        }))
+                      }
+                      onBlur={handleBlur}
+                      isChecked={values?.metadata?.["Block accounts"] || false}
                     />
                     <Text
-                      fontWeight="bold"
+                      fontWeight="500"
                       color={textColor}
-                      fontSize="md"
+                      fontSize="sm"
                       textAlign="start"
                     >
-                      Dashboard Builder
-                    </Text>
-                  </Flex>
-                  <Flex mb="10px">
-                    <Checkbox
-                      defaultChecked
-                      me="16px"
-                      colorScheme="brandScheme"
-                    />
-                    <Text
-                      fontWeight="bold"
-                      color={textColor}
-                      fontSize="md"
-                      textAlign="start"
-                    >
-                      Mobile App Design
-                    </Text>
-                  </Flex>
-                  <Flex mb="10px">
-                    <Checkbox me="16px" colorScheme="brandScheme" />
-                    <Text
-                      fontWeight="bold"
-                      color={textColor}
-                      fontSize="md"
-                      textAlign="start"
-                    >
-                      Illustrations
-                    </Text>
-                  </Flex>
-                  <Flex mb="10px">
-                    <Checkbox
-                      defaultChecked
-                      me="16px"
-                      colorScheme="brandScheme"
-                    />
-                    <Text
-                      fontWeight="bold"
-                      color={textColor}
-                      fontSize="md"
-                      textAlign="start"
-                    >
-                      Promotional LP
+                      Block accounts
                     </Text>
                   </Flex>
                 </Box>
@@ -624,315 +578,69 @@ const AddPlan = () => {
               <Box>
                 <FormLabel
                   ms="4px"
-                  fontSize="sm"
-                  fontWeight="500"
+                  fontSize="20px"
+                  fontWeight="700"
                   color={textColor}
                   display="flex"
                 >
-                  Filters & Functions<Text color={brandStars}>*</Text>
+                  LiveStreaming Package
                 </FormLabel>
                 <Box px="11px">
                   <Flex mb="10px">
-                    <Checkbox me="16px" colorScheme="brandScheme" />
+                    <Checkbox
+                      me="16px"
+                      colorScheme="brandScheme"
+                      onChange={(e) =>
+                        setValues((prev) => ({
+                          ...prev,
+                          metadata: {
+                            ...prev.metadata,
+                            Branding: e.target.checked,
+                          },
+                        }))
+                      }
+                      onBlur={handleBlur}
+                      isChecked={values?.metadata?.["Branding"] || false}
+                    />
                     <Text
-                      fontWeight="bold"
+                      fontWeight="500"
                       color={textColor}
-                      fontSize="md"
+                      fontSize="sm"
                       textAlign="start"
                     >
-                      Video Animation
+                      Branding
                     </Text>
                   </Flex>
                   <Flex mb="10px">
                     <Checkbox
                       _focus={bgFocus}
                       me="16px"
-                      defaultChecked
+                      onChange={(e) =>
+                        setValues((prev) => ({
+                          ...prev,
+                          metadata: {
+                            ...prev.metadata,
+                            "Countdown Clock": e.target.checked,
+                          },
+                        }))
+                      }
+                      onBlur={handleBlur}
+                      isChecked={values?.metadata?.["Countdown Clock"] || false}
                       colorScheme="brandScheme"
                     />
                     <Text
-                      fontWeight="bold"
+                      fontWeight="500"
                       color={textColor}
-                      fontSize="md"
+                      fontSize="sm"
                       textAlign="start"
                     >
-                      Block List
-                    </Text>
-                  </Flex>
-                  <Flex mb="10px">
-                    <Checkbox
-                      defaultChecked
-                      me="16px"
-                      colorScheme="brandScheme"
-                    />
-                    <Text
-                      fontWeight="bold"
-                      color={textColor}
-                      fontSize="md"
-                      textAlign="start"
-                    >
-                      Custom Countdown
-                    </Text>
-                  </Flex>
-                  <Flex mb="10px">
-                    <Checkbox me="16px" colorScheme="brandScheme" />
-                    <Text
-                      fontWeight="bold"
-                      color={textColor}
-                      fontSize="md"
-                      textAlign="start"
-                    >
-                      Bonus & Chances Extra
-                    </Text>
-                  </Flex>
-                  <Flex mb="10px">
-                    <Checkbox
-                      defaultChecked
-                      me="16px"
-                      colorScheme="brandScheme"
-                    />
-                    <Text
-                      fontWeight="bold"
-                      color={textColor}
-                      fontSize="md"
-                      textAlign="start"
-                    >
-                      Min. of Mentions
-                    </Text>
-                  </Flex>
-                  <Flex mb="10px">
-                    <Checkbox
-                      defaultChecked
-                      me="16px"
-                      colorScheme="brandScheme"
-                    />
-                    <Text
-                      fontWeight="bold"
-                      color={textColor}
-                      fontSize="md"
-                      textAlign="start"
-                    >
-                      Upload from File
+                      Countdown Clock
                     </Text>
                   </Flex>
                 </Box>
               </Box>
             </Grid>
-            <Flex justify="space-between" mb="20px" align="center">
-              <Text
-                color={textColor}
-                fontSize="20px"
-                fontWeight="700"
-                lineHeight="100%"
-              >
-                Spin the Wheel (Campaings & Promotions)
-              </Text>
-            </Flex>
-            <Grid
-              mb="20px"
-              gridTemplateColumns={{
-                xl: "repeat(2, 1fr)",
-                "2xl": "1fr 0.46fr",
-              }}
-              gap={{ base: "20px", xl: "30px" }}
-              display={{ base: "block", xl: "grid" }}
-            >
-              <Box px="11px">
-                <Flex mb="10px">
-                  <Checkbox me="16px" colorScheme="brandScheme" />
-                  <Text
-                    fontWeight="bold"
-                    color={textColor}
-                    fontSize="md"
-                    textAlign="start"
-                  >
-                    Capture Leads
-                  </Text>
-                </Flex>
-                <Flex mb="10px">
-                  <Checkbox
-                    me="16px"
-                    defaultChecked
-                    colorScheme="brandScheme"
-                  />
-                  <Text
-                    fontWeight="bold"
-                    color={textColor}
-                    fontSize="md"
-                    textAlign="start"
-                  >
-                    Advanced Customization
-                  </Text>
-                </Flex>
-                <Flex mb="10px">
-                  <Checkbox
-                    defaultChecked
-                    me="16px"
-                    colorScheme="brandScheme"
-                  />
-                  <Text
-                    fontWeight="bold"
-                    color={textColor}
-                    fontSize="md"
-                    textAlign="start"
-                  >
-                    Remove Ads
-                  </Text>
-                </Flex>
-                <Flex mb="10px">
-                  <Checkbox me="16px" colorScheme="brandScheme" />
-                  <Text
-                    fontWeight="bold"
-                    color={textColor}
-                    fontSize="md"
-                    textAlign="start"
-                  >
-                    Form Custom Fields
-                  </Text>
-                </Flex>
-                <Flex mb="10px">
-                  <Checkbox
-                    defaultChecked
-                    me="16px"
-                    colorScheme="brandScheme"
-                  />
-                  <Text
-                    fontWeight="bold"
-                    color={textColor}
-                    fontSize="md"
-                    textAlign="start"
-                  >
-                    Prizes Quantities & Probabilities
-                  </Text>
-                </Flex>
-                <Flex mb="10px">
-                  <Checkbox
-                    defaultChecked
-                    me="16px"
-                    colorScheme="brandScheme"
-                  />
-                  <Text
-                    fontWeight="bold"
-                    color={textColor}
-                    fontSize="md"
-                    textAlign="start"
-                  >
-                    Analitycs
-                  </Text>
-                </Flex>
-                <Flex mb="10px">
-                  <Checkbox
-                    defaultChecked
-                    me="16px"
-                    colorScheme="brandScheme"
-                  />
-                  <Text
-                    fontWeight="bold"
-                    color={textColor}
-                    fontSize="md"
-                    textAlign="start"
-                  >
-                    Fraud Detection (IP / Browsers)
-                  </Text>
-                </Flex>
-                <Flex mb="10px">
-                  <Checkbox
-                    defaultChecked
-                    me="16px"
-                    colorScheme="brandScheme"
-                  />
-                  <Text
-                    fontWeight="bold"
-                    color={textColor}
-                    fontSize="md"
-                    textAlign="start"
-                  >
-                    Winning Emails
-                  </Text>
-                </Flex>
-                <Flex mb="10px">
-                  <Checkbox
-                    defaultChecked
-                    me="16px"
-                    colorScheme="brandScheme"
-                  />
-                  <Text
-                    fontWeight="bold"
-                    color={textColor}
-                    fontSize="md"
-                    textAlign="start"
-                  >
-                    Remove AppSorteos Watermark
-                  </Text>
-                </Flex>
-              </Box>
-              <Box>
-                <FormLabel
-                  display="flex"
-                  ms="4px"
-                  fontSize="sm"
-                  fontWeight="500"
-                  color={textColor}
-                  mb="8px"
-                >
-                  Active Campaings<Text color={brandStars}>*</Text>
-                </FormLabel>
-                <Input
-                  isRequired={true}
-                  variant="auth"
-                  fontSize="sm"
-                  ms={{ base: "0px", md: "0px" }}
-                  type="number"
-                  placeholder="10"
-                  mb="24px"
-                  fontWeight="500"
-                  size="lg"
-                />
-                <FormLabel
-                  display="flex"
-                  justifyContent={"space-between"}
-                  ms="4px"
-                  fontSize="sm"
-                  fontWeight="500"
-                  color={textColor}
-                  mb="8px"
-                >
-                  <Box display={"flex"}>
-                    Montly Pageviews<Text color={brandStars}>*</Text>
-                  </Box>
-                  <Box>
-                    <Tooltip
-                      label={
-                        "Montly Pageviews per each campaing. Pageviews (or impressions) are counted every time the promotion is displayed in a user's browser."
-                      }
-                      placement="bottom"
-                    >
-                      <span>
-                        <Icon
-                          ms="auto"
-                          as={MdInfoOutline}
-                          color="secondaryGray.600"
-                          w="24px"
-                          h="24px"
-                        />
-                      </span>
-                    </Tooltip>
-                  </Box>
-                </FormLabel>
-                <Input
-                  isRequired={true}
-                  variant="auth"
-                  fontSize="sm"
-                  ms={{ base: "0px", md: "0px" }}
-                  type="number"
-                  placeholder="10"
-                  mb="24px"
-                  fontWeight="500"
-                  size="lg"
-                />
-              </Box>
-            </Grid>
-          </Card> */}
+          </Card>
 
           <Box display={"flex"} justifyContent={"end"} p={"20px"}>
             <Box w={"100px"} marginRight={"20px"}>

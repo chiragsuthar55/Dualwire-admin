@@ -4,16 +4,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { getRafflesList } from "Services/PlanService";
 
-const Billed = () => {
+const Raffles = () => {
   const dispatch = useDispatch();
 
   const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const [sort, setSort] = useState("");
   const { planLoading, rafflesList } = useSelector(({ plan }) => plan);
 
   useEffect(() => {
-    dispatch(getRafflesList(page + 1));
+    const getData = setTimeout(() => {
+      dispatch(getRafflesList(page + 1, pageSize, sort));
+    }, 500);
+    return () => clearTimeout(getData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
+  }, [page, sort, pageSize]);
 
   return (
     <>
@@ -29,13 +34,17 @@ const Billed = () => {
           dataLength={rafflesList?.total}
           pageLength={rafflesList?.per_page}
           pageIndex={rafflesList?.current_page - 1}
+          perPage={pageSize}
+          setPerPage={setPageSize}
+          sort={sort}
+          setSort={setSort}
         />
       </Box>
     </>
   );
 };
 
-export default Billed;
+export default Raffles;
 
 const columnsDataDevelopment = [
   {
