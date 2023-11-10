@@ -19,20 +19,31 @@ export const planSchema = Yup.object().shape({
       duration: Yup.string().nullable(),
     })
   ),
-  monthly: Yup.number()
-    .min(0, "Monthly Price should be zero or greater than zero")
-    .required("Monthly Price is required"),
-  yearly: Yup.number()
-    .min(0, "Yearly Price should zero or greater than zero")
-    .required("Yearly Price is required"),
+  monthly: Yup.array().when("id", (id) => {
+    return !!id
+      ? Yup.number().nullable()
+      : Yup.number()
+          .min(0, "Monthly Price should be zero or greater than zero")
+          .required("Monthly Price is required");
+  }),
+  yearly: Yup.array().when("id", (id) => {
+    return !!id
+      ? Yup.number().nullable()
+      : Yup.number()
+          .min(0, "Yearly Price should be zero or greater than zero")
+          .required("Yearly Price is required");
+  }),
+  // monthly: Yup.number()
+  //   .min(0, "Monthly Price should be zero or greater than zero")
+  //   .required("Monthly Price is required"),
+  // yearly: Yup.number()
+  //   .min(0, "Yearly Price should zero or greater than zero")
+  //   .required("Yearly Price is required"),
   // monthly: Yup.number().positive().required("Monthly Price is required"),
   // yearly: Yup.number().positive().required("Yearly Price is required"),
   metadata: Yup.object().shape({
-    "Facebook Giveaways": Yup.boolean(),
     "Instagram Giveaways": Yup.boolean(),
-    "List Giveaway": Yup.boolean(),
-    "Multi-Network Giveaway": Yup.boolean(),
-    "Twitter Giveaways": Yup.boolean(),
+    "Multi-Network Giveaways": Yup.boolean(),
     "Youtube Giveaways": Yup.boolean(),
     "Tiktok Giveaways": Yup.boolean(),
   }),

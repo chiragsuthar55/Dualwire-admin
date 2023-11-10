@@ -48,7 +48,7 @@ const AddPlan = () => {
 
   const submitHandle = useCallback(
     async (values) => {
-      const payload = {
+      let payload = {
         name: values?.name,
         description: values?.description,
         prices: [
@@ -66,6 +66,24 @@ const AddPlan = () => {
       let res;
       if (values?.id) {
         payload.plan_id = values?.id;
+        payload.prices = [
+          {
+            price_id:
+              values?.prices?.[0]?.duration === "month"
+                ? values?.prices[0]?.id
+                : values?.prices[1]?.id,
+            price: Number(values?.monthly),
+            duration: "month",
+          },
+          {
+            price_id:
+              values?.prices?.[0]?.duration === "year"
+                ? values?.prices[0]?.id
+                : values?.prices[1]?.id,
+            price: Number(values?.yearly),
+            duration: "year",
+          },
+        ];
         await dispatch(updatePlan(payload));
       } else res = await dispatch(createPlan(payload)); // or create new plan with same api
     },
@@ -88,6 +106,7 @@ const AddPlan = () => {
     onSubmit: submitHandle,
   });
 
+  console.log("values", values);
   const onChangeStatusOfPlan = useCallback(
     async (val) => {
       const res = await dispatch(updateStatusOfPlan(values?.id, val));
@@ -98,8 +117,6 @@ const AddPlan = () => {
     [dispatch, setFieldValue, values?.id, values?.status]
   );
 
-  console.log("values", values);
-  console.log("errors", errors);
   return (
     <>
       <Box pt={{ base: "130px", md: "80px", xl: "80px" }}>
@@ -339,7 +356,7 @@ const AddPlan = () => {
                     Instagram Giveaway
                   </Text>
                 </Flex>
-                <Flex mb="10px">
+                {/* <Flex mb="10px">
                   <Checkbox
                     me="16px"
                     colorScheme="brandScheme"
@@ -366,8 +383,8 @@ const AddPlan = () => {
                   >
                     Facebook Giveaway
                   </Text>
-                </Flex>
-                <Flex mb="10px">
+                </Flex> */}
+                {/* <Flex mb="10px">
                   <Checkbox
                     me="16px"
                     colorScheme="brandScheme"
@@ -418,7 +435,7 @@ const AddPlan = () => {
                   >
                     List Giveaway
                   </Text>
-                </Flex>
+                </Flex> */}
                 <Flex mb="10px">
                   <Checkbox
                     name="metadata.Youtube Giveaways"
@@ -473,19 +490,19 @@ const AddPlan = () => {
                 </Flex>
                 <Flex mb="10px">
                   <Checkbox
-                    name="metadata.Multi-Network Giveaway"
+                    name="metadata.Multi-Network Giveaways"
                     onChange={(e) =>
                       setValues((prev) => ({
                         ...prev,
                         metadata: {
                           ...prev.metadata,
-                          "Multi-Network Giveaway": e.target.checked,
+                          "Multi-Network Giveaways": e.target.checked,
                         },
                       }))
                     }
                     onBlur={handleBlur}
                     isChecked={
-                      values?.metadata?.["Multi-Network Giveaway"] || false
+                      values?.metadata?.["Multi-Network Giveaways"] || false
                     }
                     me="16px"
                     colorScheme="brandScheme"

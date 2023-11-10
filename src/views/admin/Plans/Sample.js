@@ -51,26 +51,23 @@ const AddPlan = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const submitHandle = useCallback(
-    async (values) => {
-      const payload = {
-        name: values?.name,
-        description: values?.description,
-        prices: values?.id
-          ? values?.prices?.map((x) => ({ ...x, price_id: x?.id }))
-          : values?.prices,
-        metadata: values?.metadata,
-      };
-      let res;
-      console.log("payload", payload);
-      // if (values?.id) {
-      //   payload.plan_id = values?.id;
-      //   await dispatch(updatePlan(payload));
-      // } else res = await dispatch(createPlan(payload)); // or create new plan with same api
-      // console.log("res", res);
-    },
-    [dispatch]
-  );
+  const submitHandle = useCallback(async (values) => {
+    const payload = {
+      name: values?.name,
+      description: values?.description,
+      prices: values?.id
+        ? values?.prices?.map((x) => ({ ...x, price_id: x?.id }))
+        : values?.prices,
+      metadata: values?.metadata,
+    };
+    let res;
+    console.log("payload", payload);
+    // if (values?.id) {
+    //   payload.plan_id = values?.id;
+    //   await dispatch(updatePlan(payload));
+    // } else res = await dispatch(createPlan(payload)); // or create new plan with same api
+    // console.log("res", res);
+  }, []);
 
   const {
     handleBlur,
@@ -493,19 +490,19 @@ const AddPlan = () => {
                 </Flex>
                 <Flex mb="10px">
                   <Checkbox
-                    name="metadata.Multi-Network Giveaway"
+                    name="metadata.Multi-Network Giveaways"
                     onChange={(e) =>
                       setValues((prev) => ({
                         ...prev,
                         metadata: {
                           ...prev.metadata,
-                          "Multi-Network Giveaway": e.target.checked,
+                          "Multi-Network Giveaways": e.target.checked,
                         },
                       }))
                     }
                     onBlur={handleBlur}
                     isChecked={
-                      values?.metadata?.["Multi-Network Giveaway"] || false
+                      values?.metadata?.["Multi-Network Giveaways"] || false
                     }
                     me="16px"
                     colorScheme="brandScheme"

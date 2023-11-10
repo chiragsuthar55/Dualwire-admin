@@ -35,7 +35,7 @@ export const getPlans = (plan_id) => async (dispatch) => {
 
         dispatch(setSinglePlan(updated));
       } else {
-        const updated = data?.map((x) => {
+        let updated = data?.map((x) => {
           // let metadata = Object.keys(x?.metadata)?.map((y) => ({
           //   social_name: y,
           //   is_true: x?.metadata[y],
@@ -49,6 +49,7 @@ export const getPlans = (plan_id) => async (dispatch) => {
             plan_id: x?.prices?.[0]?.plan_id,
           };
         });
+
         dispatch(setPlans(updated));
       }
       return true;
@@ -126,7 +127,6 @@ export const updatePlan = (payload) => async (dispatch) => {
  */
 export const createPlan = (payload) => async (dispatch) => {
   try {
-    console.log("payload", payload);
     if (payload) {
       dispatch(setPlanLoading(true));
       const response = await axios.post(`/admin/plan`, payload);
