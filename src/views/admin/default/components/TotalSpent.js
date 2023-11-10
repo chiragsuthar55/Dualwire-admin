@@ -52,7 +52,6 @@ export default function TotalSpent() {
     },
     [dispatch]
   );
-  console.log("loading", loading);
   useEffect(() => {
     setLoading(true);
     loadData(duration, type);
